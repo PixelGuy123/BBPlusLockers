@@ -35,6 +35,9 @@ namespace BBPlusLockers.Lockers
 		
 		internal void StopLookingAnim(PlayerManager pm)
 		{
+			if (pm.Tagged)
+				return;
+
 			trigger.enabled = false;
 
 			if (lookingAnimation != null)
@@ -138,7 +141,7 @@ namespace BBPlusLockers.Lockers
 	public class BlackLockerTrigger : MonoBehaviour
 	{
 		internal BlackLocker locker;
-		private void OnTriggerEnter(Collider other)
+		private void OnTriggerStay(Collider other)
 		{
 			if (!other.CompareTag("Player")) return;
 

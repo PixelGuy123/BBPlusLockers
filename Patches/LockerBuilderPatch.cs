@@ -46,7 +46,7 @@ namespace BBPlusLockers.Patches
 		[HarmonyPatch("Build")]
 		[HarmonyPrefix]
 		static void GetRandomChance(System.Random cRNG, ref float ___hideableChance) =>
-			___hideableChance *= (float)cRNG.NextDouble() * 7f;
+			___hideableChance *= (float)cRNG.NextDouble() * 8.4f;
 	}
 
 

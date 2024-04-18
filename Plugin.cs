@@ -10,7 +10,7 @@ using MTM101BaldAPI.Reflection;
 
 namespace BBPlusLockers.Plugin
 {
-    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.0.0")]
+    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.0.1")]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
 	public class BasePlugin : BaseUnityPlugin
@@ -57,25 +57,25 @@ namespace BBPlusLockers.Plugin
 				z.MarkAsNeverUnload(); // always
 				if (x == "F1")
 				{
-					z.items = z.items.AddToArray(new() { selection = lockpick, weight = 25 });
+					z.items = z.items.AddToArray(new() { selection = lockpick, weight = 45 });
 					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 15});
 					return;
 				}
 				if (x == "F2")
 				{
-					z.items = z.items.AddToArray(new() { selection = lockpick, weight = 55 }); 
+					z.items = z.items.AddToArray(new() { selection = lockpick, weight = 65 }); 
 					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
 					z.fieldTripItems.Add(new() { selection = lockpick, weight = 5 });
 					return;
 				}
 				if (x == "F3")
 				{
-					z.items = z.items.AddToArray(new() { selection = lockpick, weight = 60 });
+					z.items = z.items.AddToArray(new() { selection = lockpick, weight = 85 });
 					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 25 });
 					return;
 				}
 				if (x == "END")
-					z.items = z.items.AddToArray(new() { selection = lockpick, weight = 45 });
+					z.items = z.items.AddToArray(new() { selection = lockpick, weight = 75 });
 				
 			});
         }
