@@ -7,12 +7,14 @@ using MTM101BaldAPI.Registers;
 using System.IO;
 using UnityEngine;
 using MTM101BaldAPI.Reflection;
+using PixelInternalAPI;
 
 namespace BBPlusLockers.Plugin
 {
-    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.0.1")]
+    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.0.2")]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
+
 	public class BasePlugin : BaseUnityPlugin
     {
         private void Awake()
@@ -40,6 +42,8 @@ namespace BBPlusLockers.Plugin
 					itemobj.ReflectionSetVariable("item", item.itemType);
 					
 					lockpick = item;
+
+					ResourceManager.AddWeightedItemToCrazyMachine(new() { selection = lockpick, weight = 55 });
 
 					LockerCreator.InitializeAssets();
 				}
@@ -82,6 +86,7 @@ namespace BBPlusLockers.Plugin
 
 		public static string ModPath = string.Empty;
 
-		internal static ItemObject lockpick; // Will be useful for custom lockers to check for the lockpick
-    }
+		internal static ItemObject lockpick; // Will be useful for custom lockers to check for the lockpick;
+
+	}
 }
