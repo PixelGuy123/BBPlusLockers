@@ -44,7 +44,7 @@ namespace BBPlusLockers.Lockers
 			t.itemAmountToSteal = itemAmountToSteal;
 			t.aud_openLocker = aud_openLocker;
 			t.aud_troll = aud_troll;
-			t.lockerColor = useDefaultColor ? defaultColor : obj.GetComponent<MeshRenderer>().materials[1].GetColor(LockerCreator.textureColorProperty);
+			t.lockerColor = useDefaultColor ? defaultColor : obj.GetComponent<MeshRenderer>().materials[0].GetColor(LockerCreator.textureColorProperty);
 			t.name = t.name;
 
 			obj.SetActive(true); // Make Unity call Awake() here lol
