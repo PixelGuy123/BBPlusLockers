@@ -10,7 +10,7 @@ namespace BBPlusLockers.Lockers
 			Destroy(GetComponent<AudioManager>()); // No normal audio manager
 			Destroy(GetComponent<AudioSource>());
 
-			audMan = gameObject.CreateAudioManager(minDistance, maxDistance);
+			audMan = gameObject.CreatePropagatedAudioManager(minDistance, maxDistance);
 			renderer = GetComponent<MeshRenderer>();
 			Close(true, false);
 			name = GetType().Name;
