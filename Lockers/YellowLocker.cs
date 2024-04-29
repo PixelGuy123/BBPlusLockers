@@ -8,6 +8,7 @@ namespace BBPlusLockers.Lockers
 		{
 			base.AwakeFunc();
 			var itmDisplay = Instantiate(LockerCreator.man.Get<SpriteRenderer>("SpriteNoBillboardTemplate"));
+			itmDisplay.name = "YellowLockerDisplay";
 			itmDisplay.transform.SetParent(transform);
 			itmDisplay.transform.localPosition = -transform.forward * 1.01f + Vector3.up * 3f;
 			itmDisplay.transform.rotation = Quaternion.Inverse(transform.rotation);
