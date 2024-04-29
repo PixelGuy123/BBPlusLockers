@@ -30,7 +30,7 @@ namespace BBPlusLockers.Lockers
 
 		static ItemObject[] items = [];
 		internal static void InitializeItemSelection() =>
-			items = ItemMetaStorage.Instance.FindAll(x => !LockerCreator.CanOpenLocker(x.id)).ToValues();
+			items = ItemMetaStorage.Instance.FindAll(x => !LockerCreator.CanOpenLocker(x.id) && x.id != Items.None).ToValues();
 		
 			
 	}
