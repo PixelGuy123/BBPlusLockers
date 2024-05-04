@@ -3,6 +3,7 @@ using System.Collections;
 using MTM101BaldAPI.Components;
 using PixelInternalAPI.Classes;
 using PixelInternalAPI.Components;
+using PixelInternalAPI.Extensions;
 
 namespace BBPlusLockers.Lockers
 {
@@ -12,8 +13,8 @@ namespace BBPlusLockers.Lockers
 		{
 			base.AwakeFunc();
 
-			var renderer = Instantiate(LockerCreator.man.Get<SpriteRenderer>("SpriteNoBillboardTemplate"));
-			animator = renderer.gameObject.AddComponent<CustomSpriteAnimator>();
+			var renderer = ObjectCreationExtensions.CreateSpriteBillboard(null, false).AddSpriteAnimator(out animator);
+			renderer.name = "PurplePortal";
 			animator.spriteRenderer = renderer;
 			animator.animations.Add("loop", animation);
 			animator.SetDefaultAnimation("loop", 0.7f);

@@ -1,4 +1,5 @@
 ﻿using PixelInternalAPI.Classes;
+using PixelInternalAPI.Extensions;
 using System.Collections;
 using UnityEngine;
 
@@ -9,16 +10,16 @@ namespace BBPlusLockers.Lockers
 		protected override void AwakeFunc()
 		{
 			base.AwakeFunc();
-			var rend = Instantiate(LockerCreator.man.Get<SpriteRenderer>("SpriteBillboardTemplate"));
-			rend.sprite = sprite;
+			var rend = ObjectCreationExtensions.CreateSpriteBillboard(sprite).AddSpriteHolder(0f, 0); // 0 is default
+			var theBlocker = rend.transform.parent;
+			theBlocker.name = "Blocker";
 
-			var collider = new GameObject("Blocker").AddComponent<BoxCollider>();
+			var collider = theBlocker.gameObject.AddComponent<BoxCollider>();
 			collider.size = Vector3.one * (LayerStorage.TileBaseOffset - 3.5f);
 
-			var raycastBlocker = new GameObject("RaycastBlocker").AddComponent<BoxCollider>();
-			raycastBlocker.transform.SetParent(collider.transform);
+			var raycastBlocker = Instantiate(collider, collider.transform);
+			Destroy(raycastBlocker.transform.GetChild(0).gameObject); // The spritebillboard
 			raycastBlocker.transform.localPosition = Vector3.zero;
-			raycastBlocker.size = collider.size;
 			raycastBlocker.gameObject.layer = LayerStorage.blockRaycast;
 
 			blocker = collider.transform;
@@ -28,9 +29,8 @@ namespace BBPlusLockers.Lockers
 			supposedPos = Singleton<BaseGameManager>.Instance.Ec.CellFromPosition(pos).FloorWorldPosition + Vector3.up * 3f;
 			blocker.position = supposedPos;
 
-			rend.gameObject.SetActive(true);
-			rend.transform.SetParent(blocker);
-			rend.transform.localPosition = Vector3.zero;
+			theBlocker.SetParent(blocker);
+			theBlocker.localPosition = Vector3.zero;
 
 			blocker.gameObject.SetActive(false);
 		}

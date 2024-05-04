@@ -5,7 +5,6 @@ using MTM101BaldAPI.AssetTools;
 using System.IO;
 using UnityEngine;
 using System.Linq;
-using PixelInternalAPI.Classes;
 
 namespace BBPlusLockers.Lockers
 {
@@ -14,30 +13,6 @@ namespace BBPlusLockers.Lockers
 
 		internal static void InitializeAssets() // Mods can *patch* this method with postfix to include their Items that lockers can accept
 		{
-			// no sprite billboard
-			var baseSprite = new GameObject("SpriteNoBillBoard").AddComponent<SpriteRenderer>();
-			baseSprite.material = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "SpriteStandard_NoBillboard" && x.GetInstanceID() > 0);
-			baseSprite.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-			baseSprite.receiveShadows = false;
-
-			baseSprite.gameObject.layer = LayerStorage.billboardLayer;
-			Object.DontDestroyOnLoad(baseSprite.gameObject);
-			baseSprite.gameObject.SetActive(false);
-			man.Add("SpriteNoBillboardTemplate", baseSprite);
-
-			// sprite billboard
-			baseSprite = new GameObject("SpriteBillBoard").AddComponent<SpriteRenderer>();
-			baseSprite.material = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "SpriteStandard_Billboard" && x.GetInstanceID() > 0);
-			baseSprite.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-			baseSprite.receiveShadows = false;
-
-			baseSprite.gameObject.layer = LayerStorage.billboardLayer;
-			Object.DontDestroyOnLoad(baseSprite.gameObject);
-			baseSprite.gameObject.SetActive(false);
-			man.Add("SpriteBillboardTemplate", baseSprite);
-
-
-
 			lockers.Add(new() { selection = null, weight = 55 }); // Null means the already default locker (hideablelocker)
 
 			SoundObject defaultAudio = Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "Doors_Locker");

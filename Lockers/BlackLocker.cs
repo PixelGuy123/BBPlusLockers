@@ -14,7 +14,7 @@ namespace BBPlusLockers.Lockers
 			trigger.GetComponent<BlackLockerTrigger>().locker = this;
 
 			trigger.transform.SetParent(transform);
-			trigger.transform.localPosition = -transform.forward * (LayerStorage.TileBaseOffset / 2) + Vector3.up * 5f;
+			trigger.transform.localPosition = -transform.forward * ((LayerStorage.TileBaseOffset / 2) - 1f) + Vector3.up * 5f;
 			var rot = Quaternion.Inverse(transform.rotation);
 			var euler = rot.eulerAngles;
 			euler.y += 90f;

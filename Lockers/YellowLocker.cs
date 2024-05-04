@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using PixelInternalAPI.Extensions;
+using System.Collections;
+using UnityEngine;
 
 namespace BBPlusLockers.Lockers
 {
@@ -7,7 +9,7 @@ namespace BBPlusLockers.Lockers
 		protected override void AwakeFunc()
 		{
 			base.AwakeFunc();
-			var itmDisplay = Instantiate(LockerCreator.man.Get<SpriteRenderer>("SpriteNoBillboardTemplate"));
+			var itmDisplay = ObjectCreationExtensions.CreateSpriteBillboard(null, false);
 			itmDisplay.name = "YellowLockerDisplay";
 			itmDisplay.transform.SetParent(transform);
 			itmDisplay.transform.localPosition = -transform.forward * 1.01f + Vector3.up * 3f;
@@ -20,28 +22,34 @@ namespace BBPlusLockers.Lockers
 		public void Clicked(int player)
 		{
 			var pm = Singleton<CoreGameManager>.Instance.GetPlayer(player);
-			var itmobj = pm.itm.items[pm.itm.selectedItem];
-			bool flag = false;
-			if (item != null)
+			
+			StartCoroutine(AddDelay(item, pm.itm.items[pm.itm.selectedItem], pm));
+		}
+		IEnumerator AddDelay(ItemObject itemToAdd, ItemObject itmReceived, PlayerManager pm) // Modified to support StackableItems properly
+		{
+			pm.itm.RemoveItem(pm.itm.selectedItem);
+			yield return null;
+			if (itemToAdd != null)
 			{
-				pm.itm.SetItem(item, pm.itm.selectedItem);
-				item = null;
-				flag = true;
+				pm.itm.AddItem(itemToAdd);
+				pm.RuleBreak("Lockers", 0.6f, 1.1f);
 			}
-			if (itmobj.itemType != Items.None)
-			{
-				item = itmobj;
-				if (!flag)
-					pm.itm.RemoveItem(pm.itm.selectedItem);
-				flag = true;
-				itemDisplay.sprite = itmobj.itemSpriteLarge; // Expecting every item to be a 64x64
-			}
-			if (flag)
+
+			item = itmReceived.itemType == Items.None ? null : itmReceived;
+			
+				
+			if ((itemToAdd != null && itemToAdd.itemType != Items.None) || (itmReceived != null && itmReceived.itemType != Items.None))
 				Close(true, true, 64, pm.ec);
 
-			itemDisplay.gameObject.SetActive(item != null);
-
-			pm.RuleBreak("Lockers", 0.6f, 1.1f);
+			if (item != null)
+			{
+				itemDisplay.sprite = item.itemSpriteLarge;
+				itemDisplay.gameObject.SetActive(true);
+				yield break;
+			}
+			itemDisplay.gameObject.SetActive(false);
+			
+			yield break;
 		}
 		public void ClickableSighted(int player) { }
 		public bool ClickableHidden() => false;
