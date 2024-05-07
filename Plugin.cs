@@ -8,6 +8,8 @@ using System.IO;
 using UnityEngine;
 using MTM101BaldAPI.Reflection;
 using PixelInternalAPI;
+using System.Collections;
+using MTM101BaldAPI.ObjectCreation;
 
 namespace BBPlusLockers.Plugin
 {
@@ -23,66 +25,61 @@ namespace BBPlusLockers.Plugin
 			h.PatchAll();
 
 			ModPath = AssetLoader.GetModPath(this);
+			
+			LoadingEvents.RegisterOnAssetsLoaded(Info, CreateLockPick(), false);
+			LoadingEvents.RegisterOnAssetsLoaded(Info, LockerCreator.InitializeAssets(), false);
 
-			LoadingEvents.RegisterOnAssetsLoaded(() =>
-			{
-				try
-				{
-					var itemobj = new GameObject("Lockpick").AddComponent<ITM_Acceptable>();
-
-					DontDestroyOnLoad(itemobj.gameObject);
-
-					var item = ObjectCreators.CreateItemObject("LPC_Name", "LPC_Desc", 
-						AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromFile(Path.Combine(ModPath, "lockpick_small.png")), 1f), 
-						AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromFile(Path.Combine(ModPath, "lockpick.png")), 50f), 
-						EnumExtensions.ExtendEnum<Items>("Lockpick"), 45, 20).AddMeta(this, ItemFlags.None).value;
-
-					item.name = "Lockpick";
-					item.item = itemobj;
-					itemobj.ReflectionSetVariable("item", item.itemType);
-					
-					lockpick = item;
-
-					ResourceManager.AddWeightedItemToCrazyMachine(new() { selection = lockpick, weight = 55 });
-
-					LockerCreator.InitializeAssets();
-				}
-				catch (System.Exception e)
-				{
-					Debug.LogException(e);
-					MTM101BaldiDevAPI.CauseCrash(Info, e);
-				}
-			}, false);
-
-			LoadingEvents.RegisterOnAssetsLoaded(GreenLocker.InitializeItemSelection, true); // After all the items are added from any mod
+			LoadingEvents.RegisterOnAssetsLoaded(Info, GreenLocker.InitializeItemSelection, true); // After all the items are added from any mod
 
 			GeneratorManagement.Register(this, GenerationModType.Addend, (x, y, z) =>
 			{
 				z.MarkAsNeverUnload(); // always
 				if (x == "F1")
 				{
-					z.items = z.items.AddToArray(new() { selection = lockpick, weight = 45 });
+					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 45 });
 					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 15});
 					return;
 				}
 				if (x == "F2")
 				{
-					z.items = z.items.AddToArray(new() { selection = lockpick, weight = 65 }); 
+					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 65 }); 
 					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
 					z.fieldTripItems.Add(new() { selection = lockpick, weight = 5 });
 					return;
 				}
 				if (x == "F3")
 				{
-					z.items = z.items.AddToArray(new() { selection = lockpick, weight = 85 });
+					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 85 });
 					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 25 });
 					return;
 				}
 				if (x == "END")
-					z.items = z.items.AddToArray(new() { selection = lockpick, weight = 75 });
+					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 75 });
 				
 			});
         }
+
+		IEnumerator CreateLockPick()
+		{
+			yield return 1;
+			yield return "Creating lock pick...";
+			var item = new ItemBuilder(Info)
+				.SetEnum("Lockpick")
+				.SetShopPrice(45)
+				.SetGeneratorCost(20)
+				.SetItemComponent<ITM_Acceptable>()
+				.SetSprites(AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromFile(Path.Combine(ModPath, "lockpick_small.png")), 1f),
+				AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromFile(Path.Combine(ModPath, "lockpick.png")), 50f))
+				.SetNameAndDescription("LPC_Name", "LPC_Desc")
+				.SetMeta(ItemFlags.None, [])
+				.Build();
+
+			((ITM_Acceptable)item.item).ReflectionSetVariable("item", item.itemType);
+
+			lockpick = item;
+
+			ResourceManager.AddWeightedItemToCrazyMachine(new() { selection = lockpick, weight = 55 });
+		}
 
 		public static string ModPath = string.Empty;
 

@@ -5,14 +5,18 @@ using MTM101BaldAPI.AssetTools;
 using System.IO;
 using UnityEngine;
 using System.Linq;
+using System.Collections;
 
 namespace BBPlusLockers.Lockers
 {
 	public static class LockerCreator
 	{
 
-		internal static void InitializeAssets() // Mods can *patch* this method with postfix to include their Items that lockers can accept
+		internal static IEnumerator InitializeAssets() // Mods can *patch* this method with postfix to include their Items that lockers can accept
 		{
+			yield return enumeratorSize;
+
+			yield return "Creating green locker...";
 			lockers.Add(new() { selection = null, weight = 55 }); // Null means the already default locker (hideablelocker)
 
 			SoundObject defaultAudio = Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "Doors_Locker");
@@ -27,6 +31,7 @@ namespace BBPlusLockers.Lockers
 
 			lockers.Add(new() { selection = locker, weight = 25 });
 
+			yield return "Creating decoy green locker...";
 			locker = new LockerObject(typeof(AcceptorDecoyLocker))
 			{
 				aud_openLocker = defaultAudio,
@@ -38,7 +43,7 @@ namespace BBPlusLockers.Lockers
 
 			lockers.Add(new() { selection = locker, weight = 25 });
 
-
+			yield return "Creating decoy blue locker...";
 			// Decoy Blue Locker
 			locker = new LockerObject(typeof(ClickableDecoyLocker))
 			{
@@ -53,7 +58,7 @@ namespace BBPlusLockers.Lockers
 			lockers.Add(new() { selection = locker, weight = 15 });
 
 			// Dark blue locker (PULL FORCE)
-
+			yield return "Creating dark blue locker...";
 			locker = new LockerObject(typeof(DarkBlueLocker))
 			{
 				aud_openLocker = defaultAudio,
@@ -65,7 +70,7 @@ namespace BBPlusLockers.Lockers
 			DarkBlueLocker.aud_vacuumLoop = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "vacuum_loop.wav")), "Vfx_Locker_vacuum", SoundType.Voice, Color.white);
 
 			lockers.Add(new() { selection = locker, weight = 35 });
-
+			yield return "Creating decoy dark blue locker...";
 			locker = new LockerObject(typeof(AcceptorDecoyLocker))
 			{
 				aud_openLocker = defaultAudio,
@@ -79,7 +84,7 @@ namespace BBPlusLockers.Lockers
 			lockers.Add(new() { selection = locker, weight = 25 });
 
 			// Orange Locker (Push force)
-
+			yield return "Creating orange locker...";
 			var orangeLockerAudio = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "deepslam.wav")), "Vfx_Locker_deepSLAM", SoundType.Voice, Color.white);
 			locker = new LockerObject(typeof(OrangeLocker))
 			{
@@ -95,6 +100,8 @@ namespace BBPlusLockers.Lockers
 
 
 			lockers.Add(new() { selection = locker, weight = 15 });
+
+			yield return "Creating decoy orange locker...";
 
 			locker = new LockerObject(typeof(DecoyOrangeLocker))
 			{
@@ -114,6 +121,7 @@ namespace BBPlusLockers.Lockers
 			lockers.Add(new() { selection = locker, weight = 5 });
 
 			// Yellow Locker (store item)
+			yield return "Creating yellow locker...";
 
 			locker = new LockerObject(typeof(YellowLocker))
 			{
@@ -126,6 +134,7 @@ namespace BBPlusLockers.Lockers
 			lockers.Add(new() { selection = locker, weight = 35 });
 
 			// Dark green Locker (Block way)
+			yield return "Creating dark green locker...";
 
 			locker = new LockerObject(typeof(DarkGreenLocker))
 			{
@@ -140,6 +149,7 @@ namespace BBPlusLockers.Lockers
 
 			lockers.Add(new() { selection = locker, weight = 10 });
 
+			yield return "Creating purple locker...";
 			// Purple locker (Teleport)
 			locker = new LockerObject(typeof(PurpleLocker))
 			 {
@@ -158,7 +168,7 @@ namespace BBPlusLockers.Lockers
 			PurpleLocker.aud_tp = Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "Teleport");
 
 			lockers.Add(new() { selection = locker, weight = 15 });
-
+			yield return "Creating black locker locker...";
 			// Black locker (Steal)
 			locker = new LockerObject(typeof(BlackLocker))
 			{
@@ -179,7 +189,10 @@ namespace BBPlusLockers.Lockers
 			// *** items that opens lockers ***
 			lockerAcceptableItems.Add(BasePlugin.lockpick.itemType);
 
+			yield break;
+
 		}
+		const int enumeratorSize = 11;
 		public static bool CanOpenLocker(Items i) => lockerAcceptableItems.Contains(i);
 
 		readonly static HashSet<Items> lockerAcceptableItems = [];

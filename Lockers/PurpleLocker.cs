@@ -113,7 +113,7 @@ namespace BBPlusLockers.Lockers
 			audMan.PlaySingle(aud_tp);
 			e.Teleport(selPos);
 			if (pm)
-				Singleton<CoreGameManager>.Instance.GetCamera(pm.playerNumber).GetComponent<CustomPlayerCameraComponent>().ReverseSlideFOVAnimation(new BaseModifier(), 35f, 3.5f);
+				pm.GetCustomCam().ReverseSlideFOVAnimation(new ValueModifier(), 35f, 3.5f);
 
 			float height = e.Height;
 			e.SetHeight(sinkHeight);
