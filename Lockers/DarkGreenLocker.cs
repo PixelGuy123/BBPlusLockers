@@ -47,14 +47,16 @@ namespace BBPlusLockers.Lockers
 			Close(false, true, 35, ec);
 			BlockTiles(true, ec);
 
-			StartCoroutine(SpawnTheBlocker(ec));
+			StartCoroutine(SpawnTheBlocker(pm, ec));
 		}
 
-		IEnumerator SpawnTheBlocker(EnvironmentController ec)
+		IEnumerator SpawnTheBlocker(PlayerManager pm, EnvironmentController ec)
 		{
 			float scale = 0f;
 			Vector3 pos = transform.position + Vector3.up * 3f;
 			Vector3 ogPos = pos;
+			Cell blockCell = ec.CellFromPosition(supposedPos);
+			
 
 			while (true)
 			{
@@ -64,6 +66,9 @@ namespace BBPlusLockers.Lockers
 				if (scale >= 0.98f)
 					break;
 
+				if (ec.CellFromPosition(pm.transform.position) == blockCell)
+					pm.plm.Entity.AddForce(new(pm.transform.position - supposedPos, 5f, -5f));
+				
 				blocker.position = pos;
 				blocker.localScale = Vector3.one * scale;
 
