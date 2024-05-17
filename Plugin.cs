@@ -12,7 +12,7 @@ using MTM101BaldAPI.ObjectCreation;
 
 namespace BBPlusLockers.Plugin
 {
-    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.0.5")]
+    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.0.5.3")]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
 
@@ -64,7 +64,7 @@ namespace BBPlusLockers.Plugin
 			yield return "Creating lock pick...";
 			var item = new ItemBuilder(Info)
 				.SetEnum("Lockpick")
-				.SetShopPrice(45)
+				.SetShopPrice(350)
 				.SetGeneratorCost(20)
 				.SetItemComponent<ITM_Acceptable>()
 				.SetSprites(AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromFile(Path.Combine(ModPath, "lockpick_small.png")), 1f),
