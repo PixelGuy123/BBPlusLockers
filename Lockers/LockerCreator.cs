@@ -184,7 +184,7 @@ namespace BBPlusLockers.Lockers
 			for (int i = 0; i < BlackLocker.texs.Length; i++)
 				BlackLocker.texs[i] = AssetLoader.TextureFromFile(Path.Combine(BasePlugin.ModPath, $"blackLocker_{i}.png"));
 
-			lockers.Add(new() { selection = locker, weight = 25 });
+			lockers.Add(new() { selection = locker, weight = 10 });
 
 			// *** items that opens lockers ***
 			lockerAcceptableItems.Add(BasePlugin.lockpick.itemType);

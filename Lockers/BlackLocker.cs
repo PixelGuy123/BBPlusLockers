@@ -45,7 +45,7 @@ namespace BBPlusLockers.Lockers
 
 			Close(false, true, 64, pm.ec);
 			audMan.PlaySingle(aud_troll);
-			int max = Random.Range(1, 5);
+			int max = Random.Range(1, 2);
 			for (int i = 0; i < max; i++)
 				pm.itm.RemoveRandomItem();
 

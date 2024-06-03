@@ -12,7 +12,7 @@ using MTM101BaldAPI.ObjectCreation;
 
 namespace BBPlusLockers.Plugin
 {
-    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.0.5.3")]
+    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.0.6")]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
 
@@ -72,10 +72,10 @@ namespace BBPlusLockers.Plugin
 				.SetNameAndDescription("LPC_Name", "LPC_Desc")
 				.SetMeta(ItemFlags.None, [])
 				.Build();
-
 			((ITM_Acceptable)item.item).ReflectionSetVariable("item", item.itemType);
 
 			lockpick = item;
+			lockpick.AddKeyTypeItem();
 
 			ResourceManager.AddWeightedItemToCrazyMachine(new() { selection = lockpick, weight = 55 });
 		}
