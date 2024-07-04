@@ -62,12 +62,11 @@ namespace BBPlusLockers.Lockers
 			collider.enabled = false;
 
 			audMan.FlushQueue(true);
-			for (int i = 0; i < actMods.Count; i++)
+			while (actMods.Count != 0)
 			{
 				actMods[0].moveMods.Remove(moveMods[0]);
 				actMods.RemoveAt(0);
 				moveMods.RemoveAt(0);
-				i--;
 			}
 
 			Close(true, true);
