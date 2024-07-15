@@ -92,14 +92,18 @@ namespace BBPlusLockers.Lockers
 			StartCoroutine(SpawnTeleporter(ec, selPos + Vector3.up * 0.05f, false));
 
 			Entity e = foundTarget;
+			var pm = foundTarget.GetComponent<PlayerManager>();
 			foundTarget = null;
 
-			e.Teleport(transform.position + (-transform.forward * 4f + Vector3.up * e.Height));
-			e.SetFrozen(true);
-			e.SetInteractionState(false);
-			e.SetTrigger(false);
+			if (e)
+			{
+				e.Teleport(transform.position + (-transform.forward * 4f + Vector3.up * e.Height));
+				e.SetFrozen(true);
+				e.SetInteractionState(false);
+				e.SetTrigger(false);
+			}
 
-			var pm = foundTarget.GetComponent<PlayerManager>();
+			
 
 			float t = 0f;
 			Vector3 pos = e.transform.position;
@@ -107,29 +111,39 @@ namespace BBPlusLockers.Lockers
 			while (t < 1f)
 			{
 				t += Mathf.Clamp01(tpSpeed * ec.EnvironmentTimeScale * Time.deltaTime);
-				e.Teleport(Vector3.Lerp(pos, transform.position, t));
+				if (e)
+					e.Teleport(Vector3.Lerp(pos, transform.position, t));
 				yield return null;
 			}
 			audMan.PlaySingle(aud_tp);
-			e.Teleport(selPos);
-			if (pm)
-				pm.GetCustomCam().ReverseSlideFOVAnimation(new ValueModifier(), 35f, 3.5f);
+			float height = 5f;
+			if (e)
+			{
+				height = e.Height;
+				e.Teleport(selPos);
+				if (pm)
+					pm.GetCustomCam().ReverseSlideFOVAnimation(new ValueModifier(), 35f, 3.5f);
 
-			float height = e.Height;
-			e.SetHeight(sinkHeight);
+				
+				e.SetHeight(sinkHeight);
+			}
 
 			t = 0f;
 
 			while (t < 1f)
 			{
 				t += Mathf.Clamp01(sinkSpeed * ec.EnvironmentTimeScale * Time.deltaTime);
-				e.SetHeight(Mathf.Lerp(sinkHeight, height, t));
+				if (e)
+					e.SetHeight(Mathf.Lerp(sinkHeight, height, t));
 				yield return null;
 			}
+			if (e)
+			{
 
-			e.SetFrozen(false);
-			e.SetInteractionState(true);
-			e.SetTrigger(true);
+				e.SetFrozen(false);
+				e.SetInteractionState(true);
+				e.SetTrigger(true);
+			}
 
 			StartCoroutine(SpawnTeleporter(ec, default, true));
 
