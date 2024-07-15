@@ -94,12 +94,12 @@ namespace BBPlusLockers.Lockers
 			Entity e = foundTarget;
 			foundTarget = null;
 
-			e.SetFrozen(true);
-			var pm = e.GetComponent<PlayerManager>();
-			pm?.Hide(true);
 			e.Teleport(transform.position + (-transform.forward * 4f + Vector3.up * e.Height));
+			e.SetFrozen(true);
+			e.SetInteractionState(false);
 			e.SetTrigger(false);
-			e.GetComponent<NPC>()?.DisableCollision(true);
+
+			var pm = foundTarget.GetComponent<PlayerManager>();
 
 			float t = 0f;
 			Vector3 pos = e.transform.position;
@@ -128,9 +128,8 @@ namespace BBPlusLockers.Lockers
 			}
 
 			e.SetFrozen(false);
-			e.GetComponent<PlayerManager>()?.Hide(false);
+			e.SetInteractionState(true);
 			e.SetTrigger(true);
-			e.GetComponent<NPC>()?.DisableCollision(false);
 
 			StartCoroutine(SpawnTeleporter(ec, default, true));
 

@@ -43,7 +43,7 @@ namespace BBPlusLockers.Plugin
 				{
 					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 65 }); 
 					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
-					z.fieldTripItems.Add(new() { selection = lockpick, weight = 5 });
+					//z.fieldTripItems.Add(new() { selection = lockpick, weight = 5 });
 					return;
 				}
 				if (x == "F3")

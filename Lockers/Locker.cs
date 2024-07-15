@@ -21,7 +21,7 @@ namespace BBPlusLockers.Lockers
 		protected void Close(bool close, bool playNoise)
 		{
 			Closed = close;
-			renderer.materials[1].mainTexture = close ? closedTex : openTex;
+			SetMainTex(close ? closedTex : openTex);
 			if (playNoise)
 				audMan.PlaySingle(aud_openLocker);
 		}
@@ -33,8 +33,8 @@ namespace BBPlusLockers.Lockers
 				ec.MakeNoise(transform.position, noiseVal);
 		}
 
-		protected void SetColor(Color color) => renderer.materials[0].SetColor(LockerCreator.textureColorProperty, color);
-		protected void SetMainTex(Texture tex) => renderer.materials[1].mainTexture = tex;
+		protected void SetColor(Color color) => renderer.materials[colorMatIndex].SetColor(LockerCreator.textureColorProperty, color);
+		protected void SetMainTex(Texture tex) => renderer.materials[0].mainTexture = tex;
 
 		protected virtual void AwakeFunc() {}
 
@@ -58,5 +58,7 @@ namespace BBPlusLockers.Lockers
 
 		// protected stuff
 		protected bool Closed = true;
+
+		internal const int colorMatIndex = 1;
 	}
 }
