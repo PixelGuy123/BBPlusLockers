@@ -17,6 +17,8 @@ namespace BBPlusLockers.Lockers
 		{
 			yield return enumeratorSize;
 
+			LockerObject.baseLockerWhite = AssetLoader.TextureFromFile(Path.Combine(BasePlugin.ModPath, "baseLockerSide.png"));
+
 			yield return "Creating green locker...";
 			lockers.Add(new() { selection = null, weight = 55 }); // Null means the already default locker (hideablelocker)
 

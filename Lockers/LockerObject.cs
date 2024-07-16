@@ -44,12 +44,17 @@ namespace BBPlusLockers.Lockers
 			t.itemAmountToSteal = itemAmountToSteal;
 			t.aud_openLocker = aud_openLocker;
 			t.aud_troll = aud_troll;
-			t.lockerColor = useDefaultColor ? defaultColor : obj.GetComponent<MeshRenderer>().materials[Locker.colorMatIndex].GetColor(LockerCreator.textureColorProperty);
+			var mat = obj.GetComponent<MeshRenderer>();
+			t.lockerColor = useDefaultColor ? defaultColor : mat.materials[Locker.colorMatIndex].GetColor(LockerCreator.textureColorProperty);
+			if (useDefaultColor)
+				mat.materials[Locker.colorMatIndex].mainTexture = baseLockerWhite;
 			t.name = t.name;
 
 			obj.SetActive(true); // Make Unity call Awake() here lol
 
 			return t;
 		}
+
+		internal static Texture2D baseLockerWhite;
 	}
 }
