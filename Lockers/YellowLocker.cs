@@ -22,8 +22,8 @@ namespace BBPlusLockers.Lockers
 		public void Clicked(int player)
 		{
 			var pm = Singleton<CoreGameManager>.Instance.GetPlayer(player);
-			
-			StartCoroutine(AddDelay(item, pm.itm.items[pm.itm.selectedItem], pm));
+			if (!pm.itm.IsSlotLocked(pm.itm.selectedItem))
+				StartCoroutine(AddDelay(item, pm.itm.items[pm.itm.selectedItem], pm));
 		}
 		IEnumerator AddDelay(ItemObject itemToAdd, ItemObject itmReceived, PlayerManager pm) // Modified to support StackableItems properly
 		{

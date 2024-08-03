@@ -97,10 +97,9 @@ namespace BBPlusLockers.Lockers
 
 			if (e)
 			{
-				e.Teleport(transform.position + (-transform.forward * 4f + Vector3.up * e.Height));
-				e.SetFrozen(true);
-				e.SetInteractionState(false);
-				e.SetTrigger(false);
+				e.Teleport(transform.position + (-transform.forward * 4f + Vector3.up * e.InternalHeight));
+				overrider.SetFrozen(true);
+				overrider.SetInteractionState(false);
 			}
 
 			
@@ -119,13 +118,13 @@ namespace BBPlusLockers.Lockers
 			float height = 5f;
 			if (e)
 			{
-				height = e.Height;
+				height = e.InternalHeight;
 				e.Teleport(selPos);
 				if (pm)
 					pm.GetCustomCam().ReverseSlideFOVAnimation(new ValueModifier(), 35f, 3.5f);
 
 				
-				e.SetHeight(sinkHeight);
+				overrider.SetHeight(sinkHeight);
 			}
 
 			t = 0f;
@@ -134,15 +133,14 @@ namespace BBPlusLockers.Lockers
 			{
 				t += Mathf.Clamp01(sinkSpeed * ec.EnvironmentTimeScale * Time.deltaTime);
 				if (e)
-					e.SetHeight(Mathf.Lerp(sinkHeight, height, t));
+					overrider.SetHeight(Mathf.Lerp(sinkHeight, height, t));
 				yield return null;
 			}
 			if (e)
 			{
-
-				e.SetFrozen(false);
-				e.SetInteractionState(true);
-				e.SetTrigger(true);
+				overrider.SetFrozen(false);
+				overrider.SetInteractionState(true);
+				overrider.Release();
 			}
 
 			StartCoroutine(SpawnTeleporter(ec, default, true));
@@ -152,6 +150,8 @@ namespace BBPlusLockers.Lockers
 
 			yield break;
 		}
+
+		internal readonly EntityOverrider overrider = new();
 
 		bool active = false;
 
@@ -175,7 +175,7 @@ namespace BBPlusLockers.Lockers
 		void OnTriggerEnter(Collider other)
 		{
 			var e = other.GetComponent<Entity>();
-			if (e && prevTarget != e)
+			if (e && prevTarget != e && e.Override(parent.overrider))
 				parent.foundTarget = e;
 		}
 
