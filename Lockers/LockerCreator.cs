@@ -136,7 +136,7 @@ namespace BBPlusLockers.Lockers
 			};
 
 
-			lockers.Add(new() { selection = locker, weight = 35 });
+			lockers.Add(new() { selection = locker, weight = 115 });
 
 			texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "darkGreenLocker.png");
 			

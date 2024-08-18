@@ -23,7 +23,31 @@ namespace BBPlusLockers.Lockers
 		{
 			var pm = Singleton<CoreGameManager>.Instance.GetPlayer(player);
 			if (!pm.itm.IsSlotLocked(pm.itm.selectedItem))
-				StartCoroutine(AddDelay(item, pm.itm.items[pm.itm.selectedItem], pm));
+			{
+				ItemObject itm = pm.itm.items[pm.itm.selectedItem];
+				StartCoroutine(AddDelay(item, itm, pm));
+				foreach (var loc in displays)
+				{
+					if (loc != this)
+						loc.SetItemDisplay(itm);
+				}
+			}
+		}
+		public override void AfterGenCall()
+		{
+			base.AfterGenCall();
+			displays = FindObjectsOfType<YellowLocker>();
+		}
+		public void SetItemDisplay(ItemObject item)
+		{
+			this.item = item;
+			if (this.item != null && this.item.itemType != Items.None)
+			{
+				itemDisplay.sprite = this.item.itemSpriteLarge;
+				itemDisplay.gameObject.SetActive(true);
+				return;
+			}
+			itemDisplay.gameObject.SetActive(false);
 		}
 		IEnumerator AddDelay(ItemObject itemToAdd, ItemObject itmReceived, PlayerManager pm) // Modified to support StackableItems properly
 		{
@@ -41,13 +65,7 @@ namespace BBPlusLockers.Lockers
 			if ((itemToAdd != null && itemToAdd.itemType != Items.None) || (itmReceived != null && itmReceived.itemType != Items.None))
 				Close(true, true, 64, pm.ec);
 
-			if (item != null)
-			{
-				itemDisplay.sprite = item.itemSpriteLarge;
-				itemDisplay.gameObject.SetActive(true);
-				yield break;
-			}
-			itemDisplay.gameObject.SetActive(false);
+			SetItemDisplay(item);
 			
 			yield break;
 		}
@@ -59,5 +77,7 @@ namespace BBPlusLockers.Lockers
 		ItemObject item = null;
 
 		SpriteRenderer itemDisplay;
+
+		YellowLocker[] displays;
 	}
 }

@@ -12,7 +12,7 @@ using MTM101BaldAPI.ObjectCreation;
 
 namespace BBPlusLockers.Plugin
 {
-    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.0.7.2")]
+    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.0.8")]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
 
@@ -37,6 +37,8 @@ namespace BBPlusLockers.Plugin
 				{
 					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 45 });
 					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 15});
+					z.forcedItems.Add(lockpick);
+					z.forcedItems.Add(lockpick);
 					return;
 				}
 				if (x == "F2")
@@ -44,12 +46,14 @@ namespace BBPlusLockers.Plugin
 					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 65 }); 
 					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
 					//z.fieldTripItems.Add(new() { selection = lockpick, weight = 5 });
+					z.forcedItems.Add(lockpick);
 					return;
 				}
 				if (x == "F3")
 				{
 					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 85 });
 					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 25 });
+					z.forcedItems.Add(lockpick);
 					return;
 				}
 				if (x == "END")
@@ -78,6 +82,7 @@ namespace BBPlusLockers.Plugin
 			lockpick.AddKeyTypeItem();
 
 			ResourceManager.AddWeightedItemToCrazyMachine(new() { selection = lockpick, weight = 55 });
+			ResourceManager.AddPostGenCallback((_) => FindObjectsOfType<Locker>().Do(x => x.AfterGenCall()));
 		}
 
 		public static string ModPath = string.Empty;

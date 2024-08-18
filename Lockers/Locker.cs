@@ -38,6 +38,8 @@ namespace BBPlusLockers.Lockers
 
 		protected virtual void AwakeFunc() {}
 
+		public virtual void AfterGenCall() {}
+
 		public Texture2D closedTex;
 
 		public Texture2D openTex;
