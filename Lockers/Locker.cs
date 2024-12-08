@@ -49,15 +49,11 @@ namespace BBPlusLockers.Lockers
 
 		public Texture2D openTex;
 
-		public SoundObject aud_openLocker;
+		public SoundObject aud_openLocker, aud_troll;
 
 		protected AudioManager audMan;
 
 		protected MeshRenderer renderer;
-
-		public int itemAmountToSteal = 1;
-
-		public SoundObject aud_troll; // specific for decoy lockers
 
 		public Color lockerColor = default;
 

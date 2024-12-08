@@ -1,6 +1,7 @@
 ﻿using System.Collections;
+using UnityEngine;
 
-namespace BBPlusLockers.Lockers
+namespace BBPlusLockers.Lockers.DecoyLockers
 {
 	// Base class
 	public abstract class DecoyLocker : Locker
@@ -10,6 +11,7 @@ namespace BBPlusLockers.Lockers
 			for (int i = 0; i < itemAmountToSteal; i++)
 				pm.itm.RemoveRandomItem();
 
+			ScammedPlayer(pm);
 			pm.RuleBreak("Lockers", 1.5f, 0.8f);
 			Close(false, true, 65);
 			audMan.PlaySingle(aud_troll);
@@ -18,10 +20,24 @@ namespace BBPlusLockers.Lockers
 		}
 
 		protected virtual void AfterTrollAndClose(PlayerManager pm) { }
+		protected virtual void ScammedPlayer(PlayerManager pm) { }
 
 		IEnumerator Cooldown(PlayerManager pm)
 		{
-			while (audMan.AnyAudioIsPlaying) yield return null;
+			if (laughCooldown <= 0f)
+			{
+				while (audMan.AnyAudioIsPlaying || KeepTrollOpen)
+					yield return null;
+			}
+			else
+			{
+				while (KeepTrollOpen || laughCooldown > 0f)
+				{
+					laughCooldown -= ec.EnvironmentTimeScale * Time.deltaTime;
+					yield return null;
+				}
+			}
+
 			audMan.PlaySingle(aud_openLocker);
 			Close(true, true);
 
@@ -31,6 +47,11 @@ namespace BBPlusLockers.Lockers
 		}
 
 		protected bool opened = false;
+		public bool KeepTrollOpen { get; protected set; } = false;
+
+		public int itemAmountToSteal = 1;
+
+		public float laughCooldown = -1f;
 	}
 	// Item acceptor decoy locker
 	public class AcceptorDecoyLocker : DecoyLocker, IItemAcceptor

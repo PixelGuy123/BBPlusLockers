@@ -7,7 +7,7 @@ using UnityEngine;
 using System.Linq;
 using System.Collections;
 using PixelInternalAPI.Extensions;
-using Mono.Cecil;
+using BBPlusLockers.Lockers.DecoyLockers;
 using BBPlusLockers.Lockers.HideableLockerVariants;
 
 namespace BBPlusLockers.Lockers
@@ -19,18 +19,36 @@ namespace BBPlusLockers.Lockers
 		{
 			yield return enumeratorSize;
 
+			lockers.Add(new() { selection = null, weight = 250 }); // Null means the already default locker
+
 			LockerObject.baseLockerWhite = AssetLoader.TextureFromFile(Path.Combine(BasePlugin.ModPath, "baseLockerSide.png"));
 			var trueHideableLocker = GenericExtensions.FindResourceObject<HideableLocker>();
 			HideableLockerVariants.HideableLocker.audSlam = trueHideableLocker.audSlam;
+			SoundObject defaultAudio = GenericExtensions.FindResourceObjectByName<SoundObject>("Doors_Locker");
+
+			var texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "decoyBlueLocker.png");
+
+			yield return "Creating decoy blue locker...";
+			// Decoy Blue Locker
+			var locker = new LockerObject(typeof(ClickableDecoyLocker))
+			{
+				aud_openLocker = defaultAudio,
+				openTex = texs[1],
+				closedTex = texs[0],
+				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "trololo.wav")), "Vfx_Locker_trololo", SoundType.Voice, Color.white),
+				useDefaultColor = false,
+				itemAmountToSteal = 1
+			};
+
+			lockers.Add(new() { selection = locker, weight = 15 });
 
 			yield return "Creating green locker...";
-			lockers.Add(new() { selection = null, weight = 145 }); // Null means the already default locker
 
-			Texture2D[] texs = TextureExtensions.LoadTextureSheet(2, 2, BasePlugin.ModPath, "greenLockers.png");
+			texs = TextureExtensions.LoadTextureSheet(2, 2, BasePlugin.ModPath, "greenLockers.png");
 
-			SoundObject defaultAudio = Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "Doors_Locker");
+			
 			// Green Locker
-			var locker = new LockerObject(typeof(GreenLocker))
+			locker = new LockerObject(typeof(GreenLocker))
 			{
 				aud_openLocker = defaultAudio,
 				openTex = texs[3],
@@ -47,26 +65,11 @@ namespace BBPlusLockers.Lockers
 				openTex = texs[1],
 				closedTex = texs[0],
 				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "HA_HA.wav")), "Vfx_Locker_HAHA", SoundType.Voice, Color.white),
-				defaultColor = Color.green
+				defaultColor = Color.green,
+				itemAmountToSteal = 0
 			};
 
 			lockers.Add(new() { selection = locker, weight = 25 });
-
-			texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "decoyBlueLocker.png");
-
-			yield return "Creating decoy blue locker...";
-			// Decoy Blue Locker
-			locker = new LockerObject(typeof(ClickableDecoyLocker))
-			{
-				aud_openLocker = defaultAudio,
-				openTex = texs[1],
-				closedTex = texs[0],
-				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "trololo.wav")), "Vfx_Locker_trololo", SoundType.Voice, Color.white),
-				useDefaultColor = false,
-				itemAmountToSteal = 2
-			};
-
-			lockers.Add(new() { selection = locker, weight = 15 });
 
 			texs = TextureExtensions.LoadTextureSheet(2, 2, BasePlugin.ModPath, "darkBlueLocker.png");
 
@@ -84,14 +87,14 @@ namespace BBPlusLockers.Lockers
 
 			lockers.Add(new() { selection = locker, weight = 35 });
 			yield return "Creating decoy dark blue locker...";
-			locker = new LockerObject(typeof(AcceptorDecoyLocker))
+			locker = new LockerObject(typeof(DecoyDarkBlueLocker))
 			{
 				aud_openLocker = defaultAudio,
 				openTex = texs[3],
 				closedTex = texs[2],
 				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "deepHA_HA.wav")), "Vfx_Locker_deepHAHA", SoundType.Voice, Color.white),
 				defaultColor = new(0.01171875f, 0.01171875f, 0.99609375f), // dark blue
-				itemAmountToSteal = 2
+				itemAmountToSteal = 0
 			};
 
 			lockers.Add(new() { selection = locker, weight = 25 });
@@ -123,7 +126,7 @@ namespace BBPlusLockers.Lockers
 				closedTex = texs[0],
 				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "heheheha.wav")), "Vfx_Locker_heheha", SoundType.Voice, Color.white),
 				defaultColor = new(0.99609375f, 0.61328125f, 0.04296875f), // orange
-				itemAmountToSteal = 4
+				itemAmountToSteal = 1
 			};
 
 
@@ -140,7 +143,7 @@ namespace BBPlusLockers.Lockers
 			};
 
 
-			lockers.Add(new() { selection = locker, weight = 115 });
+			lockers.Add(new() { selection = locker, weight = 35 });
 
 			texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "darkGreenLocker.png");
 			
@@ -198,8 +201,10 @@ namespace BBPlusLockers.Lockers
 			};
 			BlackLocker.texs = [.. texs.Take(10)];
 
+			yield return "Creating brown locker...";
+
 			lockers.Add(new() { selection = locker, weight = 10 });
-			texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "");
+			texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "brownLocker.png");
 			// Brown Locker
 			locker = new LockerObject(typeof(BrownLocker))
 			{
@@ -212,6 +217,38 @@ namespace BBPlusLockers.Lockers
 			};
 
 			BrownLocker.sprForLocker = AssetLoader.SpriteFromFile(Path.Combine(BasePlugin.ModPath, "brownLockerHud.png"), Vector2.one * 0.5f);
+			lockers.Add(new() { selection = locker, weight = 15 });
+
+			// Light Orange Locker
+			yield return "Creating light orange locker...";
+			texs = TextureExtensions.LoadTextureSheet(2, 2, BasePlugin.ModPath, "LightOrangeLockers.png");
+
+			locker = new LockerObject(typeof(LightOrangeLocker))
+			{
+				aud_openLocker = defaultAudio,
+				openTex = texs[3],
+				closedTex = texs[2],
+				defaultColor = new(0.98046875f, 0.23046875f, 0.015625f),
+				minDistance = 75f,
+				maxDistance = 85f
+			};
+
+			lockers.Add(new() { selection = locker, weight = 16 });
+
+			locker = new LockerObject(typeof(DecoyLightOrangeLocker))
+			{
+				aud_openLocker = defaultAudio,
+				openTex = texs[1],
+				closedTex = texs[0],
+				defaultColor = new(0.98046875f, 0.23046875f, 0.015625f),
+				minDistance = 115f,
+				maxDistance = 165f,
+				aud_troll = GenericExtensions.FindResourceObject<LookAtGuy>().audBlindLoop,
+				itemAmountToSteal = 2,
+				decoyLaughCooldown = 14.5f,
+			};
+
+			lockers.Add(new() { selection = locker, weight = 10 });
 
 			// *** items that opens lockers ***
 			lockerAcceptableItems.Add(BasePlugin.lockpick.itemType);
@@ -219,7 +256,7 @@ namespace BBPlusLockers.Lockers
 			yield break;
 
 		}
-		const int enumeratorSize = 11;
+		const int enumeratorSize = 13;
 		public static bool CanOpenLocker(Items i) => lockerAcceptableItems.Contains(i);
 
 		readonly static HashSet<Items> lockerAcceptableItems = [];

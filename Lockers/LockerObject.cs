@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BBPlusLockers.Lockers.DecoyLockers;
+using System;
 using UnityEngine;
 using static UnityEngine.Object;
 
@@ -22,7 +23,7 @@ namespace BBPlusLockers.Lockers
 
 		public bool useDefaultColor = true;
 
-		public float minDistance = 25f, maxDistance = 50f;
+		public float minDistance = 25f, maxDistance = 50f, decoyLaughCooldown = -1f;
 
 		public Locker CreateLocker(GameObject target)
 		{
@@ -39,9 +40,13 @@ namespace BBPlusLockers.Lockers
 			var t = target.AddComponent(typeOfLocker) as Locker;
 			t.closedTex = closedTex;
 			t.openTex = openTex;
-			t.itemAmountToSteal = itemAmountToSteal;
 			t.aud_openLocker = aud_openLocker;
-			t.aud_troll = aud_troll;
+			t.aud_troll = aud_troll; // Aud troll for normal lockers because black locker exists
+			if (t is DecoyLocker decLoc)
+			{
+				decLoc.itemAmountToSteal = itemAmountToSteal;
+				decLoc.laughCooldown = decoyLaughCooldown;
+			}
 			var mat = target.GetComponent<MeshRenderer>();
 			t.lockerColor = useDefaultColor ? defaultColor : mat.materials[Locker.colorMatIndex].GetColor(LockerCreator.textureColorProperty);
 			if (useDefaultColor)

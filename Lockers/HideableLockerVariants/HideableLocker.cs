@@ -12,7 +12,7 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
             base.AwakeFunc();
             cameraTransform = new GameObject("HideableLocker_Cam").transform;
             cameraTransform.SetParent(transform);
-            cameraTransform.localPosition = Vector3.zero;
+            cameraTransform.localPosition = Vector3.up * 5f;
 
             hud = ObjectCreationExtensions.CreateCanvas();
             hud.name = "HideableLockerCanvas";
@@ -86,7 +86,7 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
 
         protected int noiseVal = 78;
 
-        protected float guiltTime = 1f;
+        protected float guiltTime = 2.5f;
 
         protected Canvas hud;
 
