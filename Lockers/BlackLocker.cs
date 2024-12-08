@@ -43,7 +43,7 @@ namespace BBPlusLockers.Lockers
 			if (lookingAnimation != null)
 				StopCoroutine(lookingAnimation);
 
-			Close(false, true, 64, pm.ec);
+			Close(false, true, 64);
 			audMan.PlaySingle(aud_troll);
 			int max = Random.Range(1, 2);
 			for (int i = 0; i < max; i++)

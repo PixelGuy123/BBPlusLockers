@@ -10,9 +10,9 @@ namespace BBPlusLockers.Lockers
 		protected override void AwakeFunc()
 		{
 			base.AwakeFunc();
-			var rend = ObjectCreationExtensions.CreateSpriteBillboard(sprite).AddSpriteHolder(0f, 0); // 0 is default
-			var theBlocker = rend.transform.parent;
+			var theBlocker = ObjectCreationExtensions.CreateSpriteBillboard(sprite).AddSpriteHolder(out var rend, 0f, 0); // 0 is default
 			theBlocker.name = "Blocker";
+			rend.name = "BlockerVisual";
 
 			var collider = theBlocker.gameObject.AddComponent<BoxCollider>();
 			collider.size = Vector3.one * (LayerStorage.TileBaseOffset - 3.5f);
@@ -29,8 +29,8 @@ namespace BBPlusLockers.Lockers
 			supposedPos = Singleton<BaseGameManager>.Instance.Ec.CellFromPosition(pos).FloorWorldPosition + Vector3.up * 3f;
 			blocker.position = supposedPos;
 
-			theBlocker.SetParent(blocker);
-			theBlocker.localPosition = Vector3.zero;
+			theBlocker.transform.SetParent(blocker);
+			theBlocker.transform.localPosition = Vector3.zero;
 
 			blocker.gameObject.SetActive(false);
 		}
@@ -44,7 +44,7 @@ namespace BBPlusLockers.Lockers
 			openable = false;
 			pm.RuleBreak("Lockers", 1.2f, 0.5f);
 			blocker.gameObject.SetActive(true);
-			Close(false, true, 35, ec);
+			Close(false, true, 35);
 			BlockTiles(true, ec);
 
 			StartCoroutine(SpawnTheBlocker(pm, ec));

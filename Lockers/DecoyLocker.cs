@@ -11,7 +11,7 @@ namespace BBPlusLockers.Lockers
 				pm.itm.RemoveRandomItem();
 
 			pm.RuleBreak("Lockers", 1.5f, 0.8f);
-			Close(false, true, 65, pm.ec);
+			Close(false, true, 65);
 			audMan.PlaySingle(aud_troll);
 			StartCoroutine(Cooldown(pm));
 			opened = true;

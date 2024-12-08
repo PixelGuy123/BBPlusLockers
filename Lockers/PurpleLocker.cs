@@ -13,7 +13,7 @@ namespace BBPlusLockers.Lockers
 		{
 			base.AwakeFunc();
 
-			var renderer = ObjectCreationExtensions.CreateSpriteBillboard(null, false).AddSpriteAnimator(out animator);
+			var renderer = ObjectCreationExtensions.CreateSpriteBillboard(null, false).AddSpriteAnimator(out CustomSpriteAnimator animator);
 			renderer.name = "PurplePortal";
 			animator.spriteRenderer = renderer;
 			animator.animations.Add("loop", animation);
@@ -21,6 +21,11 @@ namespace BBPlusLockers.Lockers
 			animator.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
 
 			animator.gameObject.SetActive(false);
+
+			portal = animator.gameObject.AddComponent<PurpleLockerPortal>();
+			portal.audMan = portal.gameObject.CreatePropagatedAudioManager(55f, 65f);
+			portal.animator = animator;
+			portal.audLoop = aud_runningLoop;
 
 			trigger = new GameObject("PurpleLockerTrigger", typeof(SphereCollider)).AddComponent<PurpleLockerTrigger>();
 			var c = trigger.GetComponent<SphereCollider>();
@@ -38,7 +43,7 @@ namespace BBPlusLockers.Lockers
 		public void InsertItem(PlayerManager player, EnvironmentController ec)
 		{
 			active = true;
-			Close(false, true, 78, ec);
+			Close(false, true, 78);
 			trigger.prevTarget = player.plm.Entity;
 			trigger.gameObject.SetActive(true);
 			StartCoroutine(WaitForWarp(ec));
@@ -50,13 +55,13 @@ namespace BBPlusLockers.Lockers
 		{
 			if (!despawn)
 			{
-				animator.gameObject.SetActive(true);
-				animator.transform.position = pos;
+				portal.gameObject.SetActive(true);
+				portal.transform.position = pos;
 				float scale = 0f;
 				while (scale < 1f)
 				{
 					scale += Mathf.Clamp01(tpSpeed * 2f * ec.EnvironmentTimeScale * Time.deltaTime);
-					animator.transform.localScale = Vector3.one * scale;
+					portal.transform.localScale = Vector3.one * scale;
 					yield return null;
 				}
 			}
@@ -72,10 +77,10 @@ namespace BBPlusLockers.Lockers
 				while (scale > 0f)
 				{
 					scale -= Mathf.Clamp01(tpSpeed * 2f * ec.EnvironmentTimeScale * Time.deltaTime);
-					animator.transform.localScale = Vector3.one * scale;
+					portal.transform.localScale = Vector3.one * scale;
 					yield return null;
 				}
-				animator.gameObject.SetActive(false);
+				portal.gameObject.SetActive(false);
 			}
 
 			yield break;
@@ -156,9 +161,9 @@ namespace BBPlusLockers.Lockers
 		bool active = false;
 
 		internal static CustomAnimation<Sprite> animation;
-		internal static SoundObject aud_tp;
+		internal static SoundObject aud_tp, aud_runningLoop;
 
-		CustomSpriteAnimator animator;
+		PurpleLockerPortal portal;
 		PurpleLockerTrigger trigger;
 
 		internal Entity foundTarget = null;
@@ -187,4 +192,25 @@ namespace BBPlusLockers.Lockers
 		}
 	}
 
+	public class PurpleLockerPortal : MonoBehaviour
+	{
+		[SerializeField]
+		internal PropagatedAudioManager audMan;
+
+		[SerializeField]
+		internal SoundObject audLoop;
+
+		[SerializeField]
+		internal CustomSpriteAnimator animator;
+
+		void OnEnable()
+		{
+			audMan.maintainLoop = true;
+			audMan.SetLoop(true);
+			audMan.QueueAudio(audLoop);
+		}
+
+		void OnDisable() =>
+			audMan.FlushQueue(true);
+	}
 }

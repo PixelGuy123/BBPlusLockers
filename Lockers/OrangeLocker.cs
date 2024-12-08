@@ -51,7 +51,7 @@ namespace BBPlusLockers.Lockers
 		{
 			cooldown = 30f;
 			pm.RuleBreak("Lockers", 1.2f, 0.5f);
-			Close(false, true, 72, ec);
+			Close(false, true, 72);
 			StartCoroutine(PushAndWait(ec));
 		}
 

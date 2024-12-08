@@ -26,7 +26,7 @@ namespace BBPlusLockers.Lockers
 		{
 			force = 0f;
 			cooldown = 35f;
-			Close(false, true, 45, ec);
+			Close(false, true, 45);
 			pm.plm.Entity.AddForce(new((pm.transform.position - transform.position).normalized, 6f, -4f));
 			pm.RuleBreak("Lockers", 1.2f, 0.5f);			
 			StartCoroutine(Vacuum(ec));

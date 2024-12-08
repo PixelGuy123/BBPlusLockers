@@ -16,7 +16,7 @@ namespace BBPlusLockers.Lockers
 
 		public SoundObject aud_troll;
 
-		public Type typeOfLocker = t;
+		protected Type typeOfLocker = t;
 
 		public Color defaultColor = default;
 
@@ -24,33 +24,31 @@ namespace BBPlusLockers.Lockers
 
 		public float minDistance = 25f, maxDistance = 50f;
 
-		public Locker CreateLocker(HideableLocker target)
+		public Locker CreateLocker(GameObject target)
 		{
 			// ****** startup hideable locker ******
-			var obj = target.gameObject;
-			DestroyImmediate(target); // NO ONE NEEDS YOU!!
-			int max = obj.transform.childCount;
+			int max = target.transform.childCount;
 			for (int i = 0; i < max; i++)
-				Destroy(obj.transform.GetChild(i).gameObject);
+				Destroy(target.transform.GetChild(i).gameObject);
 
 
 			// ** actually implement locker **
 
-			obj.SetActive(false);
+			target.SetActive(false);
 
-			var t = obj.AddComponent(typeOfLocker) as Locker;
+			var t = target.AddComponent(typeOfLocker) as Locker;
 			t.closedTex = closedTex;
 			t.openTex = openTex;
 			t.itemAmountToSteal = itemAmountToSteal;
 			t.aud_openLocker = aud_openLocker;
 			t.aud_troll = aud_troll;
-			var mat = obj.GetComponent<MeshRenderer>();
+			var mat = target.GetComponent<MeshRenderer>();
 			t.lockerColor = useDefaultColor ? defaultColor : mat.materials[Locker.colorMatIndex].GetColor(LockerCreator.textureColorProperty);
 			if (useDefaultColor)
 				mat.materials[Locker.colorMatIndex].mainTexture = baseLockerWhite;
 			t.name = t.name;
 
-			obj.SetActive(true); // Make Unity call Awake() here lol
+			target.SetActive(true); // Make Unity call Awake() here lol
 
 			return t;
 		}

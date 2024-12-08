@@ -24,11 +24,12 @@ namespace BBPlusLockers.Patches
 			.GetCodeInstruction(out var instruction) // Gets local variable in the operand of this instruction
 
 			.MatchForward(true, 
+				new(OpCodes.Ldarg_0),
+				new(CodeInstruction.LoadField(typeof(LockerBuilder), "lockerPre")), // Looks for red locker, not blue one anymore
 				new(OpCodes.Ldarg_1),
-				new(OpCodes.Ldloc_1),
-				new(OpCodes.Callvirt, AccessTools.Method(typeof(Cell), "AddRenderer", [typeof(Renderer)]))
+				new(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Cell), "ObjectBase"))
 				)
-			.Advance(1)
+			.Advance(3)
 			.InsertAndAdvance(
 				new(OpCodes.Ldloc_1), // local variable for mesh renderer
 				new(OpCodes.Ldarg_S, instruction.operand),
@@ -37,16 +38,16 @@ namespace BBPlusLockers.Patches
 					var locker = WeightedSelection<LockerObject>.ControlledRandomSelectionList(LockerCreator.lockers, y);
 					if (locker == null)
 						return; // Hideable locker has been chosen (lol)
-					locker.CreateLocker(x.GetComponent<HideableLocker>());
+					locker.CreateLocker(x.gameObject);
 				})
 				)
 
 			.InstructionEnumeration();
 
-		[HarmonyPatch("Build")]
-		[HarmonyPrefix]
-		static void GetRandomChance(System.Random cRNG, ref float ___hideableChance) =>
-			___hideableChance *= (float)cRNG.NextDouble() * 8.4f;
+		//[HarmonyPatch("Build")]
+		//[HarmonyPrefix] Not needed anymore
+		//static void GetRandomChance(System.Random cRNG, ref float ___hideableChance) =>
+		//	___hideableChance *= (float)cRNG.NextDouble() * 8.4f;
 	}
 
 

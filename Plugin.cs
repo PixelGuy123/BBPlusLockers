@@ -12,7 +12,7 @@ using MTM101BaldAPI.ObjectCreation;
 
 namespace BBPlusLockers.Plugin
 {
-    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.0.8")]
+    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.1.0")]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
 
@@ -24,14 +24,20 @@ namespace BBPlusLockers.Plugin
 			h.PatchAll();
 
 			ModPath = AssetLoader.GetModPath(this);
+
+			AssetLoader.LoadLocalizationFolder(Path.Combine(ModPath, "Language", "English"), Language.English);
 			
 			LoadingEvents.RegisterOnAssetsLoaded(Info, CreateLockPick(), false);
 			LoadingEvents.RegisterOnAssetsLoaded(Info, LockerCreator.InitializeAssets(), false);
 
 			LoadingEvents.RegisterOnAssetsLoaded(Info, GreenLocker.InitializeItemSelection, true); // After all the items are added from any mod
 
-			GeneratorManagement.Register(this, GenerationModType.Addend, (x, y, z) =>
+			GeneratorManagement.Register(this, GenerationModType.Addend, (x, y, sco) =>
 			{
+				var z = sco.levelObject;
+				if (z == null)
+					return;
+
 				z.MarkAsNeverUnload(); // always
 				if (x == "F1")
 				{

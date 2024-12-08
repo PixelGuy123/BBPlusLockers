@@ -63,7 +63,7 @@ namespace BBPlusLockers.Lockers
 			
 				
 			if ((itemToAdd != null && itemToAdd.itemType != Items.None) || (itmReceived != null && itmReceived.itemType != Items.None))
-				Close(true, true, 64, pm.ec);
+				Close(true, true, 64);
 
 			SetItemDisplay(item);
 			

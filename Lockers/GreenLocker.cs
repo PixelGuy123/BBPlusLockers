@@ -13,7 +13,7 @@ namespace BBPlusLockers.Lockers
 		public void InsertItem(PlayerManager player, EnvironmentController ec)
 		{
 			used = true;
-			Close(false, true, 78, ec);
+			Close(false, true, 78);
 			player.RuleBreak("Lockers", 1.5f, 0.8f);
 			StartCoroutine(WaitAndAdd(player));
 		}

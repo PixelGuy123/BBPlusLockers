@@ -13,6 +13,7 @@ namespace BBPlusLockers.Lockers
 			audMan = gameObject.CreatePropagatedAudioManager(minDistance, maxDistance);
 			renderer = GetComponent<MeshRenderer>();
 			Close(true, false);
+			ec = Singleton<BaseGameManager>.Instance.Ec;
 			name = GetType().Name;
 			SetColor(lockerColor);
 			AwakeFunc();
@@ -26,12 +27,16 @@ namespace BBPlusLockers.Lockers
 				audMan.PlaySingle(aud_openLocker);
 		}
 
-		protected void Close(bool close, bool playNoise, int noiseVal, EnvironmentController ec)
+		protected void Close(bool close, bool playNoise, int noiseVal)
 		{
 			Close(close, playNoise);
 			if (noiseVal > 0)
-				ec.MakeNoise(transform.position, noiseVal);
+				MakeNoise(noiseVal);
 		}
+
+		protected void MakeNoise(int noiseVal) =>
+			ec.MakeNoise(ec.CellFromPosition(transform.position).FloorWorldPosition, Mathf.Max(1, noiseVal));
+		
 
 		protected void SetColor(Color color) => renderer.materials[colorMatIndex].SetColor(LockerCreator.textureColorProperty, color);
 		protected void SetMainTex(Texture tex) => renderer.materials[0].mainTexture = tex;
@@ -60,6 +65,8 @@ namespace BBPlusLockers.Lockers
 
 		// protected stuff
 		protected bool Closed = true;
+
+		protected EnvironmentController ec;
 
 		internal const int colorMatIndex = 1;
 	}

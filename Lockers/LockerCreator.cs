@@ -7,6 +7,8 @@ using UnityEngine;
 using System.Linq;
 using System.Collections;
 using PixelInternalAPI.Extensions;
+using Mono.Cecil;
+using BBPlusLockers.Lockers.HideableLockerVariants;
 
 namespace BBPlusLockers.Lockers
 {
@@ -18,9 +20,11 @@ namespace BBPlusLockers.Lockers
 			yield return enumeratorSize;
 
 			LockerObject.baseLockerWhite = AssetLoader.TextureFromFile(Path.Combine(BasePlugin.ModPath, "baseLockerSide.png"));
+			var trueHideableLocker = GenericExtensions.FindResourceObject<HideableLocker>();
+			HideableLockerVariants.HideableLocker.audSlam = trueHideableLocker.audSlam;
 
 			yield return "Creating green locker...";
-			lockers.Add(new() { selection = null, weight = 55 }); // Null means the already default locker (hideablelocker)
+			lockers.Add(new() { selection = null, weight = 145 }); // Null means the already default locker
 
 			Texture2D[] texs = TextureExtensions.LoadTextureSheet(2, 2, BasePlugin.ModPath, "greenLockers.png");
 
@@ -173,9 +177,11 @@ namespace BBPlusLockers.Lockers
 
 			PurpleLocker.animation = new(TextureExtensions.LoadSpriteSheet(3, 3, 15f, BasePlugin.ModPath, "portal.png"), 0.7f);
 			PurpleLocker.aud_tp = Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "Teleport");
+			PurpleLocker.aud_runningLoop = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "portal_loop.wav")), string.Empty, SoundType.Effect, Color.white);
+			PurpleLocker.aud_runningLoop.subtitle = false;
 
 			lockers.Add(new() { selection = locker, weight = 15 });
-			yield return "Creating black locker locker...";
+			yield return "Creating black locker...";
 
 			texs = TextureExtensions.LoadTextureSheet(4, 3, BasePlugin.ModPath, "blackLocker.png");
 
@@ -193,6 +199,19 @@ namespace BBPlusLockers.Lockers
 			BlackLocker.texs = [.. texs.Take(10)];
 
 			lockers.Add(new() { selection = locker, weight = 10 });
+			texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "");
+			// Brown Locker
+			locker = new LockerObject(typeof(BrownLocker))
+			{
+				aud_openLocker = defaultAudio,
+				openTex = texs[1],
+				closedTex = texs[0],
+				defaultColor = new(0.41796875f, 0.265625f, 0.1640625f),
+				minDistance = 75f,
+				maxDistance = 85f
+			};
+
+			BrownLocker.sprForLocker = AssetLoader.SpriteFromFile(Path.Combine(BasePlugin.ModPath, "brownLockerHud.png"), Vector2.one * 0.5f);
 
 			// *** items that opens lockers ***
 			lockerAcceptableItems.Add(BasePlugin.lockpick.itemType);
