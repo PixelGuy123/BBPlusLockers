@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace BBPlusLockers.Patches
 {
-	[HarmonyPatch(typeof(LockerBuilder))]
+	[HarmonyPatch(typeof(Structure_Lockers))]
 	internal class LockerBuilderPatch // new lockers here (reminder: _TextureColor is the property for locker colors, not texture)
 	{
 		[HarmonyPatch("AddLockers")]
@@ -21,11 +21,11 @@ namespace BBPlusLockers.Patches
 				new(OpCodes.Stloc_1)
 				)
 			.Advance(1)
-			.GetCodeInstruction(out var instruction) // Gets local variable in the operand of this instruction
+			.GetCodeInstruction(out var instruction) // Gets local variable in the operand of this instruction (cRNG)
 
 			.MatchForward(true, 
 				new(OpCodes.Ldarg_0),
-				new(CodeInstruction.LoadField(typeof(LockerBuilder), "lockerPre")), // Looks for red locker, not blue one anymore
+				new(CodeInstruction.LoadField(typeof(Structure_Lockers), "lockerPre")), // Looks for red locker, not blue one anymore
 				new(OpCodes.Ldarg_1),
 				new(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Cell), "ObjectBase"))
 				)
