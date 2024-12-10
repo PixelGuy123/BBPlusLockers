@@ -2,7 +2,6 @@
 using System.Collections;
 using MTM101BaldAPI.Components;
 using PixelInternalAPI.Classes;
-using PixelInternalAPI.Components;
 using PixelInternalAPI.Extensions;
 
 namespace BBPlusLockers.Lockers
@@ -20,8 +19,6 @@ namespace BBPlusLockers.Lockers
 			animator.SetDefaultAnimation("loop", 0.7f);
 			animator.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
 
-			animator.gameObject.SetActive(false);
-
 			portal = animator.gameObject.AddComponent<PurpleLockerPortal>();
 			portal.audMan = portal.gameObject.CreatePropagatedAudioManager(55f, 65f);
 			portal.animator = animator;
@@ -38,6 +35,9 @@ namespace BBPlusLockers.Lockers
 			trigger.transform.SetParent(transform);
 			trigger.transform.localPosition = -transform.forward * (LayerStorage.TileBaseOffset / 2) + Vector3.up * 5f;
 			trigger.gameObject.SetActive(false);
+
+			animator.gameObject.SetActive(false);
+			portal.Initialize();
 		}
 
 		public void InsertItem(PlayerManager player, EnvironmentController ec)
@@ -203,8 +203,13 @@ namespace BBPlusLockers.Lockers
 		[SerializeField]
 		internal CustomSpriteAnimator animator;
 
+		bool initialized = false;
+
+		public void Initialize() => initialized = true;
+
 		void OnEnable()
 		{
+			if (!initialized) return;
 			audMan.maintainLoop = true;
 			audMan.SetLoop(true);
 			audMan.QueueAudio(audLoop);

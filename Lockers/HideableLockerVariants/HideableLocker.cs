@@ -13,6 +13,7 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
             cameraTransform = new GameObject("HideableLocker_Cam").transform;
             cameraTransform.SetParent(transform);
             cameraTransform.localPosition = Vector3.up * 5f;
+			cameraTransform.localRotation = Quaternion.Euler(0, 180f, 0);
 
             hud = ObjectCreationExtensions.CreateCanvas();
             hud.name = "HideableLockerCanvas";

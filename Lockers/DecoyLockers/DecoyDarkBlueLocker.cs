@@ -11,7 +11,7 @@ namespace BBPlusLockers.Lockers.DecoyLockers
 		protected override void AwakeFunc()
 		{
 			base.AwakeFunc();
-			collider = new GameObject("DarkBlueLockerCollider", typeof(DarkBlueLockerTrigger)).AddComponent<SphereCollider>();
+			collider = new GameObject("DarkBlueLockerCollider", typeof(DecoyDarkBlueLockerTrigger)).AddComponent<SphereCollider>();
 			collider.radius = 19f;
 			collider.isTrigger = true;
 			collider.enabled = false;

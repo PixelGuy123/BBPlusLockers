@@ -250,13 +250,76 @@ namespace BBPlusLockers.Lockers
 
 			lockers.Add(new() { selection = locker, weight = 10 });
 
+			yield return "Creating aqua locker...";
+			texs = TextureExtensions.LoadTextureSheet(2, 2, BasePlugin.ModPath, "aquaLocker.png");
+
+			locker = new LockerObject(typeof(AquaLocker))
+			{
+				aud_openLocker = defaultAudio,
+				openTex = texs[3],
+				closedTex = texs[2],
+				defaultColor = new(0.203125f, 0.671875f, 0.546875f),
+				minDistance = 65f,
+				maxDistance = 90f,
+			};
+
+			lockers.Add(new() { selection = locker, weight = 7 });
+
+			locker = new LockerObject(typeof(DecoyAquaLocker))
+			{
+				aud_openLocker = defaultAudio,
+				openTex = texs[1],
+				closedTex = texs[0],
+				defaultColor = new(0.203125f, 0.671875f, 0.546875f),
+				minDistance = 65f,
+				maxDistance = 90f,
+				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "ogNyanCat.wav")), "Vfx_Locker_NyanCat", SoundType.Voice, Color.white),
+				itemAmountToSteal = 0,
+			};
+
+			lockers.Add(new() { selection = locker, weight = 14 });
+
+			// Baldi Locker
+			BaldiLocker.baldos = TextureExtensions.LoadTextureSheet(2, 2, BasePlugin.ModPath, "baldiLocker.png");
+
+			locker = new LockerObject(typeof(BaldiLocker))
+			{
+				aud_openLocker = defaultAudio,
+				openTex = BaldiLocker.baldos[1],
+				closedTex = BaldiLocker.baldos[0],
+				defaultColor = new(0, 0.99609375f, 0.5625f),
+				minDistance = 65f,
+				maxDistance = 90f,
+				aud_troll = GenericExtensions.FindResourceObjectByName<SoundObject>("Elv_Buzz"),
+				itemAmountToSteal = 0,
+			};
+
+			lockers.Add(new() { selection = locker, weight = 20 });
+
+			// Turquoise Locker
+			texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "turquoiseLocker.png");
+
+			locker = new LockerObject(typeof(TurquoiseLocker))
+			{
+				aud_openLocker = defaultAudio,
+				openTex = texs[1],
+				closedTex = texs[0],
+				defaultColor = new(0, 0.828125f, 0.71484375f),
+				minDistance = 75f,
+				maxDistance = 90f,
+			};
+
+			TurquoiseLocker.sprite = AssetLoader.SpriteFromFile(Path.Combine(BasePlugin.ModPath, "turquoiseWater.png"), Vector2.one * 0.5f, 16f);
+
+			lockers.Add(new() { selection = locker, weight = 20 });
+
 			// *** items that opens lockers ***
 			lockerAcceptableItems.Add(BasePlugin.lockpick.itemType);
 
 			yield break;
 
 		}
-		const int enumeratorSize = 13;
+		const int enumeratorSize = 14;
 		public static bool CanOpenLocker(Items i) => lockerAcceptableItems.Contains(i);
 
 		readonly static HashSet<Items> lockerAcceptableItems = [];
