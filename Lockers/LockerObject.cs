@@ -21,8 +21,6 @@ namespace BBPlusLockers.Lockers
 
 		public Color defaultColor = default;
 
-		public bool useDefaultColor = true;
-
 		public float minDistance = 25f, maxDistance = 50f, decoyLaughCooldown = -1f;
 
 		public Locker CreateLocker(GameObject target)
@@ -48,9 +46,8 @@ namespace BBPlusLockers.Lockers
 				decLoc.laughCooldown = decoyLaughCooldown;
 			}
 			var mat = target.GetComponent<MeshRenderer>();
-			t.lockerColor = useDefaultColor ? defaultColor : mat.materials[Locker.colorMatIndex].GetColor(LockerCreator.textureColorProperty);
-			if (useDefaultColor)
-				mat.materials[Locker.colorMatIndex].mainTexture = baseLockerWhite;
+			t.lockerColor = defaultColor;
+			mat.materials[Locker.colorMatIndex].mainTexture = baseLockerWhite;
 			t.name = t.name;
 
 			target.SetActive(true); // Make Unity call Awake() here lol
