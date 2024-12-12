@@ -25,6 +25,7 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
 		protected abstract Sprite HudImage();
 		protected abstract void LockerUsed();
 		protected virtual bool CanLockerBeUsed() => true;
+		protected virtual bool CanMakeNoise() => true;
         public void Clicked(int player)
         {
 			if (!CanLockerBeUsed())
@@ -38,7 +39,8 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
 
             StartCoroutine(CameraReset(playerInLocker));
 
-            MakeNoise(noiseVal);
+			if (CanMakeNoise())
+				MakeNoise(noiseVal);
             audMan.PlaySingle(audSlam);
 
             hud.gameObject.SetActive(true);
@@ -56,7 +58,9 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
             yield return null;
             while (player == playerInLocker)
             {
-                MakeNoise(noiseVal);
+				if (CanMakeNoise())
+					MakeNoise(noiseVal);
+
                 if (!Singleton<CoreGameManager>.Instance.Paused && (Singleton<InputManager>.Instance.GetDigitalInput("Interact", true) || player.transform.position != pos))
                 {
                     player.plm.Entity.SetInteractionState(true);
@@ -74,7 +78,10 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
                 yield return null;
             }
 			LockerUsed();
-            MakeNoise(noiseVal);
+
+			if (CanMakeNoise())
+				MakeNoise(noiseVal);
+
             audMan.PlaySingle(audSlam);
             Singleton<CoreGameManager>.Instance.GetCamera(player.playerNumber).UpdateTargets(null, 20);
             Singleton<CoreGameManager>.Instance.GetCamera(player.playerNumber).SetControllable(true);

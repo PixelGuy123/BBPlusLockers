@@ -274,13 +274,14 @@ namespace BBPlusLockers.Lockers
 				defaultColor = new(0.203125f, 0.671875f, 0.546875f),
 				minDistance = 65f,
 				maxDistance = 90f,
-				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "ogNyanCat.wav")), "Vfx_Locker_NyanCat", SoundType.Voice, Color.white),
+				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "ogNyanCat.wav")), "Vfx_Locker_NyanCat", SoundType.Effect, Color.white),
 				itemAmountToSteal = 0,
 			};
 
 			lockers.Add(new() { selection = locker, weight = 14 });
 
 			// Baldi Locker
+			yield return "Creating Baldi Locker...";
 			BaldiLocker.baldos = TextureExtensions.LoadTextureSheet(2, 2, BasePlugin.ModPath, "baldiLocker.png");
 
 			locker = new LockerObject(typeof(BaldiLocker))
@@ -294,10 +295,13 @@ namespace BBPlusLockers.Lockers
 				aud_troll = GenericExtensions.FindResourceObjectByName<SoundObject>("Elv_Buzz"),
 				itemAmountToSteal = 0,
 			};
+			BaldiLocker.audOhHi = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "BAL_Locker.wav")), "Vfx_BAL_SingleHi", SoundType.Voice, Color.green);
+			BaldiLocker.audPop = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "BAL_Locker_Pop.wav")), "Sfx_Effects_Pop", SoundType.Effect, Color.white);
 
 			lockers.Add(new() { selection = locker, weight = 20 });
 
 			// Turquoise Locker
+			yield return "Creating turquoise locker...";
 			texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "turquoiseLocker.png");
 
 			locker = new LockerObject(typeof(TurquoiseLocker))
@@ -320,7 +324,7 @@ namespace BBPlusLockers.Lockers
 			yield break;
 
 		}
-		const int enumeratorSize = 14;
+		const int enumeratorSize = 17;
 		public static bool CanOpenLocker(Items i) => lockerAcceptableItems.Contains(i);
 
 		readonly static HashSet<Items> lockerAcceptableItems = [];

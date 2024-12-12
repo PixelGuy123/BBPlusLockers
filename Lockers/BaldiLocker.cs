@@ -32,6 +32,7 @@ namespace BBPlusLockers.Lockers
 		IEnumerator Baldi()
 		{
 			Close(false, true);
+			audMan.PlaySingle(audOhHi);
 			var baldo = ec.GetBaldi();
 			baldo.spriteRenderer[0].enabled = false;
 			baldo.enabled = false;
@@ -42,6 +43,7 @@ namespace BBPlusLockers.Lockers
 
 			yield return new WaitForSecondsEnvironmentTimescale(ec, 0.85f);
 
+			audMan.PlaySingle(audPop);
 			baldo.Navigator.Entity.Teleport(ec.CellFromPosition(transform.position).FloorWorldPosition);
 			baldo.enabled = true;
 			baldo.TakeApple();
@@ -55,5 +57,7 @@ namespace BBPlusLockers.Lockers
 		bool used = false;
 
 		internal static Texture2D[] baldos;
+
+		internal static SoundObject audOhHi, audPop;
 	}
 }

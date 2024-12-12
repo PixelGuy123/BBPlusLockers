@@ -12,6 +12,8 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
 		}
 		protected override bool CanLockerBeUsed() =>
 			!broken;
+		protected override bool CanMakeNoise() =>
+			false;
 
 		bool broken = false;
 		internal static Sprite sprForLocker;
