@@ -26,6 +26,7 @@ namespace BBPlusLockers.Lockers
 			HideableLockerVariants.HideableLocker.audSlam = trueHideableLocker.audSlam;
 			SoundObject defaultAudio = GenericExtensions.FindResourceObjectByName<SoundObject>("Doors_Locker");
 			Color blueLockerColor = new(0.015625f, 0.984375f, 0.984375f);
+			HideableLockerVariants.HideableLocker.hideableLockerCanvasPre = GenericExtensions.FindResourceObject<HideableLocker>().hud;
 
 			var texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "decoyBlueLocker.png");
 

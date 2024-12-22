@@ -1,5 +1,4 @@
-﻿using PixelInternalAPI.Extensions;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,13 +14,14 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
             cameraTransform.localPosition = Vector3.up * 5f;
 			cameraTransform.localRotation = Quaternion.Euler(0, 180f, 0);
 
-            hud = ObjectCreationExtensions.CreateCanvas();
+            hud = Instantiate(hideableLockerCanvasPre);
             hud.name = "HideableLockerCanvas";
             hud.transform.SetParent(transform);
             hud.gameObject.SetActive(false);
 
-            image = ObjectCreationExtensions.CreateImage(hud, HudImage());
-        }
+            image = hud.GetComponentInChildren<Image>();
+			image.sprite = HudImage();
+		}
 		protected abstract Sprite HudImage();
 		protected abstract void LockerUsed();
 		protected virtual bool CanLockerBeUsed() => true;
@@ -86,7 +86,7 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
             Singleton<CoreGameManager>.Instance.GetCamera(player.playerNumber).UpdateTargets(null, 20);
             Singleton<CoreGameManager>.Instance.GetCamera(player.playerNumber).SetControllable(true);
             hud.gameObject.SetActive(false);
-            player.RuleBreak("Lockers", guiltTime);
+            player.RuleBreak("Lockers", guiltTime, 1.5f);
             yield break;
         }
 
@@ -103,5 +103,7 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
         protected Transform cameraTransform;
 
         static internal SoundObject audSlam;
+
+		static internal Canvas hideableLockerCanvasPre;
     }
 }

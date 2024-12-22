@@ -11,6 +11,7 @@ namespace BBPlusLockers.Lockers
 			if (used) return;
 
 			used = true;
+			Singleton<CoreGameManager>.Instance.GetPlayer(player).RuleBreak("Lockers", 1.5f, 0.8f);
 			StartCoroutine(!ec.GetBaldi() || Random.value >= 0.15f ? BuzzNoise() : Baldi()); // Really low chance to be useful lol
 		}
 
