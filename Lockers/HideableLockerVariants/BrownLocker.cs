@@ -5,6 +5,7 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
 	public class BrownLocker : HideableLocker // Reminder: open texture is broken one, closed texture is the usable one
 	{
 		protected override Sprite HudImage() => sprForLocker;
+		protected override Texture2D TextureWhenOnSight() => sprForSight;
 		protected override void LockerUsed() 
 		{
 			Close(false, false);
@@ -17,5 +18,6 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
 
 		bool broken = false;
 		internal static Sprite sprForLocker;
+		internal static Texture2D sprForSight;
 	}
 }

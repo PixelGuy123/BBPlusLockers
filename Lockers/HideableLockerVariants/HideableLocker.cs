@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using BBPlusLockers.Plugin;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,7 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
 			image.sprite = HudImage();
 		}
 		protected abstract Sprite HudImage();
+		protected virtual Texture2D TextureWhenOnSight() => null;
 		protected abstract void LockerUsed();
 		protected virtual bool CanLockerBeUsed() => true;
 		protected virtual bool CanMakeNoise() => true;
@@ -47,10 +49,19 @@ namespace BBPlusLockers.Lockers.HideableLockerVariants
             hud.worldCamera = Singleton<CoreGameManager>.Instance.GetCamera(player).canvasCam;
         }
 
-        public void ClickableSighted(int player) { }
-        public bool ClickableHidden() => !CanLockerBeUsed();
+        public void ClickableSighted(int player)
+		{
+			if (BasePlugin.hasAnimations && CanLockerBeUsed() && TextureWhenOnSight() != null)
+				SetMainTex(TextureWhenOnSight());
+		}
+		public void ClickableUnsighted(int player) 
+		{
+			if (BasePlugin.hasAnimations && CanLockerBeUsed())
+				Close(true, false);
+		}
+		public bool ClickableHidden() => !CanLockerBeUsed();
         public bool ClickableRequiresNormalHeight() => true;
-        public void ClickableUnsighted(int player) { }
+       
 
         private IEnumerator CameraReset(PlayerManager player)
         {

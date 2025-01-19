@@ -4,11 +4,11 @@ using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using System.IO;
 using UnityEngine;
-using System.Linq;
 using System.Collections;
 using PixelInternalAPI.Extensions;
 using BBPlusLockers.Lockers.DecoyLockers;
 using BBPlusLockers.Lockers.HideableLockerVariants;
+using System.Linq;
 
 namespace BBPlusLockers.Lockers
 {
@@ -188,25 +188,27 @@ namespace BBPlusLockers.Lockers
 			lockers.Add(new() { selection = locker, weight = 15 });
 			yield return "Creating black locker...";
 
-			texs = TextureExtensions.LoadTextureSheet(4, 3, BasePlugin.ModPath, "blackLocker.png");
+			texs = TextureExtensions.LoadTextureSheet(11, 2, BasePlugin.ModPath, "blackLocker.png");
 
 			// Black locker (Steal)
 			locker = new LockerObject(typeof(BlackLocker))
 			{
 				aud_openLocker = defaultAudio,
-				openTex = texs[11],
-				closedTex = texs[10],
+				openTex = texs[texs.Length - 1],
+				closedTex = texs[0],
 				defaultColor = new(0.140625f, 0.140625f, 0.140625f), // black
 				minDistance = 60f,
 				maxDistance = 90f,
 				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "elephanthit.ogg")), "Vfx_Locker_elephant", SoundType.Voice, Color.white)
 			};
-			BlackLocker.texs = [.. texs.Take(10)];
+			BlackLocker.lookingTextures = texs.Skip(10).Take(6);
+			BlackLocker.fadeInTextures = texs.Take(10);
+			BlackLocker.fadeOutScaredTextures = texs.Skip(16).Take(5);
 
 			yield return "Creating brown locker...";
 
 			lockers.Add(new() { selection = locker, weight = 10 });
-			texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "brownLocker.png");
+			texs = TextureExtensions.LoadTextureSheet(3, 1, BasePlugin.ModPath, "brownLocker.png");
 			// Brown Locker
 			locker = new LockerObject(typeof(BrownLocker))
 			{
@@ -217,7 +219,7 @@ namespace BBPlusLockers.Lockers
 				minDistance = 75f,
 				maxDistance = 85f
 			};
-
+			BrownLocker.sprForSight = texs[2];
 			BrownLocker.sprForLocker = AssetLoader.SpriteFromFile(Path.Combine(BasePlugin.ModPath, "brownLockerHud.png"), Vector2.one * 0.5f);
 			lockers.Add(new() { selection = locker, weight = 15 });
 
@@ -335,5 +337,23 @@ namespace BBPlusLockers.Lockers
 		internal const string textureColorProperty = "_TextureColor";
 
 		internal static AssetManager man = new();
+
+		static T[] Skip<T>(this T[] ar, int count)
+		{
+			var newAr = new T[ar.Length - count];
+			int index = count;
+			for (int z = 0; z < newAr.Length; z++)
+				newAr[z] = ar[index++];
+			return newAr;
+		}
+		static T[] Take<T>(this T[] ar, int count) =>
+			ar.Take(0, count);
+		static T[] Take<T>(this T[] ar, int index, int count)
+		{
+			var newAr = new T[count];
+			for (int z = 0; z < count; z++)
+				newAr[z] = ar[index++];
+			return newAr;
+		}
 	}
 }

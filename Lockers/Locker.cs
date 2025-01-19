@@ -37,12 +37,9 @@ namespace BBPlusLockers.Lockers
 		protected void MakeNoise(int noiseVal) =>
 			ec.MakeNoise(ec.CellFromPosition(transform.position).FloorWorldPosition, Mathf.Max(1, noiseVal));
 		
-
 		protected void SetColor(Color color) => renderer.materials[colorMatIndex].SetColor(LockerCreator.textureColorProperty, color);
 		protected void SetMainTex(Texture tex) => renderer.materials[0].mainTexture = tex;
-
 		protected virtual void AwakeFunc() {}
-
 		public virtual void AfterGenCall() {}
 
 		public Texture2D closedTex;

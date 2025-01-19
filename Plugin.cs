@@ -6,18 +6,20 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Registers;
 using System.IO;
 using MTM101BaldAPI.Reflection;
+using BepInEx.Bootstrap;
 using PixelInternalAPI;
 using System.Collections;
 using MTM101BaldAPI.ObjectCreation;
 
 namespace BBPlusLockers.Plugin
 {
-    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.1.2")]
+    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.1.3")]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
 
 	public class BasePlugin : BaseUnityPlugin
     {
+		internal static bool hasAnimations = false;
         private void Awake()
         {
         	Harmony h = new("pixelguy.pixelmodding.baldiplus.bbpluslockers");
@@ -31,6 +33,8 @@ namespace BBPlusLockers.Plugin
 			LoadingEvents.RegisterOnAssetsLoaded(Info, LockerCreator.InitializeAssets(), false);
 
 			LoadingEvents.RegisterOnAssetsLoaded(Info, GreenLocker.InitializeItemSelection, true); // After all the items are added from any mod
+
+			hasAnimations = Chainloader.PluginInfos.ContainsKey("pixelguy.pixelmodding.baldiplus.newanimations");
 
 			GeneratorManagement.Register(this, GenerationModType.Addend, (x, y, sco) =>
 			{

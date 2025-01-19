@@ -48,6 +48,13 @@ namespace BBPlusLockers.Lockers
 			var mat = target.GetComponent<MeshRenderer>();
 			t.lockerColor = defaultColor;
 			mat.materials[Locker.colorMatIndex].mainTexture = baseLockerWhite;
+
+			var collider = target.GetComponent<BoxCollider>();
+
+			Vector3 center = collider.center;
+			center.z = -0.05f;
+			collider.center = center;
+
 			t.name = t.name;
 
 			target.SetActive(true); // Make Unity call Awake() here lol
