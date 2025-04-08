@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using HarmonyLib;
 using MTM101BaldAPI.Registers;
-using System.Collections;
 using PixelInternalAPI.Extensions;
+using System.Collections;
 using System.Collections.Generic;
-using HarmonyLib;
+using UnityEngine;
 
 namespace BBPlusLockers.Lockers
 {
@@ -19,7 +19,7 @@ namespace BBPlusLockers.Lockers
 		}
 		public bool ItemFits(Items item) =>
 			!used && LockerCreator.CanOpenLocker(item);
-		
+
 
 		IEnumerator WaitAndAdd(PlayerManager pm)
 		{
@@ -39,13 +39,14 @@ namespace BBPlusLockers.Lockers
 			{
 				s.shopItems.Do(x =>
 				{
-					if (!items.Contains(x.selection))
-						items.Add(x.selection);
+					var meta = x.selection.GetMeta();
+					if (meta != null && !items.Contains(meta.value))
+						items.Add(meta.value);
 				});
 			}
 		}
-		
-			
+
+
 	}
 
 }
