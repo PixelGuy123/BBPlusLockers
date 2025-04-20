@@ -10,10 +10,11 @@ using BepInEx.Bootstrap;
 using PixelInternalAPI;
 using System.Collections;
 using MTM101BaldAPI.ObjectCreation;
+using PixelInternalAPI.Extensions;
 
 namespace BBPlusLockers.Plugin
 {
-    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.1.3.1")]
+    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.1.3.2")]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.newanimations", BepInDependency.DependencyFlags.SoftDependency)]
@@ -87,7 +88,8 @@ namespace BBPlusLockers.Plugin
 				.SetNameAndDescription("LPC_Name", "LPC_Desc")
 				.SetMeta(ItemFlags.None, [])
 				.Build();
-			((ITM_Acceptable)item.item).ReflectionSetVariable("item", item.itemType);
+			((ITM_Acceptable)item.item).item = item.itemType;
+			((ITM_Acceptable)item.item).layerMask = GenericExtensions.FindResourceObjectByName<LayerMaskObject>("PlayerClickLayerMask");
 
 			lockpick = item;
 			lockpick.AddKeyTypeItem();
