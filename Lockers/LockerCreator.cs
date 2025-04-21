@@ -251,6 +251,7 @@ namespace BBPlusLockers.Lockers
 				itemAmountToSteal = 2,
 				decoyLaughCooldown = 14.5f,
 			};
+			DecoyLightOrangeLocker.gaugeSprite = GenericExtensions.FindResourceObject<LookAtGuy>().gaugeSprite;
 
 			lockers.Add(new() { selection = locker, weight = 10 });
 
@@ -266,6 +267,7 @@ namespace BBPlusLockers.Lockers
 				minDistance = 65f,
 				maxDistance = 90f,
 			};
+			AquaLocker.gaugeSprite = AssetLoader.SpriteFromFile(Path.Combine(BasePlugin.ModPath, "aquaLocker_icon.png"), Vector2.one * 0.5f, 1);
 
 			lockers.Add(new() { selection = locker, weight = 7 });
 

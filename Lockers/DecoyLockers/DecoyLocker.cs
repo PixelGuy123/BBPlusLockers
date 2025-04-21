@@ -31,14 +31,24 @@ namespace BBPlusLockers.Lockers.DecoyLockers
 			}
 			else
 			{
+				bool hasGauge = gaugeIcon != null;
+				float totalTime = laughCooldown;
+				if (hasGauge){
+					gauge = Singleton<CoreGameManager>.Instance.GetHud(pm.playerNumber).gaugeManager.ActivateNewGauge(gaugeIcon, laughCooldown);
+				}
+
 				while (KeepTrollOpen || laughCooldown > 0f)
 				{
 					laughCooldown -= ec.EnvironmentTimeScale * Time.deltaTime;
+					if (hasGauge)
+						gauge.SetValue(totalTime, laughCooldown);
 					yield return null;
 				}
-			}
 
-			audMan.PlaySingle(aud_openLocker);
+				if (hasGauge)
+					gauge.Deactivate();
+			}
+			audMan.FlushQueue(true);
 			Close(true, true);
 
 			AfterTrollAndClose(pm);
@@ -52,6 +62,9 @@ namespace BBPlusLockers.Lockers.DecoyLockers
 		public int itemAmountToSteal = 1;
 
 		public float laughCooldown = -1f;
+		protected Sprite gaugeIcon;
+
+		HudGauge gauge;
 	}
 	// Item acceptor decoy locker
 	public class AcceptorDecoyLocker : DecoyLocker, IItemAcceptor
