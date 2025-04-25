@@ -15,11 +15,19 @@ namespace BBPlusLockers.Lockers
 	public static class LockerCreator
 	{
 
+		const string // constant strings for each floor
+				F1 = "F1",
+				F2 = "F2",
+				F3 = "F3",
+				F4 = "F4",
+				F5 = "F5",
+				END = "END"
+			;
+
 		internal static IEnumerator InitializeAssets() // Mods can *patch* this method with postfix to include their Items that lockers can accept
 		{
 			yield return enumeratorSize;
 
-			lockers.Add(new() { selection = null, weight = 250 }); // Null means the already default locker
 
 			LockerObject.baseLockerWhite = AssetLoader.TextureFromFile(Path.Combine(BasePlugin.ModPath, "baseLockerSide.png"));
 			var trueHideableLocker = GenericExtensions.FindResourceObject<HideableLocker>();
@@ -42,7 +50,11 @@ namespace BBPlusLockers.Lockers
 				itemAmountToSteal = 1
 			};
 
-			lockers.Add(new() { selection = locker, weight = 15 });
+			lockers[END].Add(new() { selection = locker, weight = 125 });
+			lockers[F2].Add(new() { selection = locker, weight = 25 });
+			lockers[F3].Add(new() { selection = locker, weight = 65 });
+			lockers[F4].Add(new() { selection = locker, weight = 75 });
+			lockers[F5].Add(new() { selection = locker, weight = 65 });
 
 			yield return "Creating green locker...";
 
@@ -58,7 +70,9 @@ namespace BBPlusLockers.Lockers
 				defaultColor = Color.green
 			};
 
-			lockers.Add(new() { selection = locker, weight = 25 });
+			lockers[F1].Add(new() { selection = locker, weight = 125 });
+			lockers[F2].Add(new() { selection = locker, weight = 85});
+		
 
 			yield return "Creating decoy green locker...";
 			locker = new LockerObject(typeof(AcceptorDecoyLocker))
@@ -71,7 +85,11 @@ namespace BBPlusLockers.Lockers
 				itemAmountToSteal = 0
 			};
 
-			lockers.Add(new() { selection = locker, weight = 25 });
+			lockers[F2].Add(new() { selection = locker, weight = 75 });
+			lockers[F3].Add(new() { selection = locker, weight = 45 });
+			lockers[F4].Add(new() { selection = locker, weight = 15 });
+			lockers[F5].Add(new() { selection = locker, weight = 20 });
+
 
 			texs = TextureExtensions.LoadTextureSheet(2, 2, BasePlugin.ModPath, "darkBlueLocker.png");
 
@@ -86,8 +104,13 @@ namespace BBPlusLockers.Lockers
 			};
 			DarkBlueLocker.aud_vacuumStart = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "vacuum_start.wav")), "Vfx_Locker_vacuum", SoundType.Voice, Color.white);
 			DarkBlueLocker.aud_vacuumLoop = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "vacuum_loop.wav")), "Vfx_Locker_vacuum", SoundType.Voice, Color.white);
+			
+			lockers[END].Add(new() { selection = locker, weight = 45 });
+			lockers[F2].Add(new() { selection = locker, weight = 30 });
+			lockers[F3].Add(new() { selection = locker, weight = 20 });
+			lockers[F4].Add(new() { selection = locker, weight = 15 });
+			lockers[F5].Add(new() { selection = locker, weight = 10 });
 
-			lockers.Add(new() { selection = locker, weight = 35 });
 			yield return "Creating decoy dark blue locker...";
 			locker = new LockerObject(typeof(DecoyDarkBlueLocker))
 			{
@@ -99,7 +122,10 @@ namespace BBPlusLockers.Lockers
 				itemAmountToSteal = 0
 			};
 
-			lockers.Add(new() { selection = locker, weight = 25 });
+			lockers[F2].Add(new() { selection = locker, weight = 25 });
+			lockers[F3].Add(new() { selection = locker, weight = 45});
+			lockers[F4].Add(new() { selection = locker, weight = 35 });
+			lockers[F5].Add(new() { selection = locker, weight = 15 });
 
 			texs = TextureExtensions.LoadTextureSheet(8, 1, BasePlugin.ModPath, "orangeLocker.png");
 
@@ -116,8 +142,11 @@ namespace BBPlusLockers.Lockers
 
 			OrangeLocker.openTexs = [.. texs.Skip(4)];
 
-
-			lockers.Add(new() { selection = locker, weight = 15 });
+			lockers[END].Add(new() { selection = locker, weight = 45 });
+			lockers[F2].Add(new() { selection = locker, weight = 35 });
+			lockers[F3].Add(new() { selection = locker, weight = 20 });
+			lockers[F4].Add(new() { selection = locker, weight = 25 });
+			lockers[F5].Add(new() { selection = locker, weight = 17 });
 
 			yield return "Creating decoy orange locker...";
 
@@ -131,8 +160,10 @@ namespace BBPlusLockers.Lockers
 				itemAmountToSteal = 1
 			};
 
-
-			lockers.Add(new() { selection = locker, weight = 5 });
+			lockers[END].Add(new() { selection = locker, weight = 15 });
+			lockers[F3].Add(new() { selection = locker, weight = 7 });
+			lockers[F4].Add(new() { selection = locker, weight = 6 });
+			lockers[F5].Add(new() { selection = locker, weight = 8 });
 
 			// Yellow Locker (store item)
 			yield return "Creating yellow locker...";
@@ -144,8 +175,10 @@ namespace BBPlusLockers.Lockers
 				defaultColor = new(0.99609375f, 0.91796875f, 0.01171875f) // Yellow
 			};
 
-
-			lockers.Add(new() { selection = locker, weight = 35 });
+			lockers[END].Add(new() { selection = locker, weight = 15 });
+			lockers[F1].Add(new() { selection = locker, weight = 75 });
+			lockers[F2].Add(new() { selection = locker, weight = 45 });
+			lockers[F3].Add(new() { selection = locker, weight = 35 });
 
 			texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "darkGreenLocker.png");
 			
@@ -164,7 +197,10 @@ namespace BBPlusLockers.Lockers
 			};
 			DarkGreenLocker.sprite = AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromFile(Path.Combine(BasePlugin.ModPath, "stopBoard.png")), 35f);
 
-			lockers.Add(new() { selection = locker, weight = 10 });
+			lockers[END].Add(new() { selection = locker, weight = 30 });
+			lockers[F3].Add(new() { selection = locker, weight = 25 });
+			lockers[F4].Add(new() { selection = locker, weight = 17 });
+			lockers[F5].Add(new() { selection = locker, weight = 19 });
 
 			texs = TextureExtensions.LoadTextureSheet(2, 1, BasePlugin.ModPath, "purpleLocker.png");
 
@@ -185,7 +221,10 @@ namespace BBPlusLockers.Lockers
 			PurpleLocker.aud_runningLoop = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "portal_loop.wav")), string.Empty, SoundType.Effect, Color.white);
 			PurpleLocker.aud_runningLoop.subtitle = false;
 
-			lockers.Add(new() { selection = locker, weight = 15 });
+			lockers[END].Add(new() { selection = locker, weight = 22 });
+			lockers[F4].Add(new() { selection = locker, weight = 20 });
+			lockers[F5].Add(new() { selection = locker, weight = 17 });
+
 			yield return "Creating black locker...";
 
 			texs = TextureExtensions.LoadTextureSheet(11, 2, BasePlugin.ModPath, "blackLocker.png");
@@ -205,9 +244,12 @@ namespace BBPlusLockers.Lockers
 			BlackLocker.fadeInTextures = texs.Take(10);
 			BlackLocker.fadeOutScaredTextures = texs.Skip(16).Take(5);
 
+			lockers[F3].Add(new() { selection = locker, weight = 15 });
+			lockers[F4].Add(new() { selection = locker, weight = 12 });
+			lockers[F5].Add(new() { selection = locker, weight = 10 });
+
 			yield return "Creating brown locker...";
 
-			lockers.Add(new() { selection = locker, weight = 10 });
 			texs = TextureExtensions.LoadTextureSheet(3, 1, BasePlugin.ModPath, "brownLocker.png");
 			// Brown Locker
 			locker = new LockerObject(typeof(BrownLocker))
@@ -221,7 +263,11 @@ namespace BBPlusLockers.Lockers
 			};
 			BrownLocker.sprForSight = texs[2];
 			BrownLocker.sprForLocker = AssetLoader.SpriteFromFile(Path.Combine(BasePlugin.ModPath, "brownLockerHud.png"), Vector2.one * 0.5f);
-			lockers.Add(new() { selection = locker, weight = 15 });
+			lockers[F1].Add(new() { selection = locker, weight = 175 });
+			lockers[F2].Add(new() { selection = locker, weight = 125 });
+			lockers[F3].Add(new() { selection = locker, weight = 135 });
+			lockers[F4].Add(new() { selection = locker, weight = 110 });
+			lockers[F5].Add(new() { selection = locker, weight = 65 });
 
 			// Light Orange Locker
 			yield return "Creating light orange locker...";
@@ -237,7 +283,12 @@ namespace BBPlusLockers.Lockers
 				maxDistance = 85f
 			};
 
-			lockers.Add(new() { selection = locker, weight = 16 });
+			lockers[END].Add(new() { selection = locker, weight = 45 });
+			lockers[F1].Add(new() { selection = locker, weight = 85 });
+			lockers[F2].Add(new() { selection = locker, weight = 35 });
+			lockers[F3].Add(new() { selection = locker, weight = 25 });
+			lockers[F4].Add(new() { selection = locker, weight = 35 });
+			lockers[F5].Add(new() { selection = locker, weight = 15 });
 
 			locker = new LockerObject(typeof(DecoyLightOrangeLocker))
 			{
@@ -253,7 +304,10 @@ namespace BBPlusLockers.Lockers
 			};
 			DecoyLightOrangeLocker.gaugeSprite = GenericExtensions.FindResourceObject<LookAtGuy>().gaugeSprite;
 
-			lockers.Add(new() { selection = locker, weight = 10 });
+			lockers[END].Add(new() { selection = locker, weight = 55 });
+			lockers[F3].Add(new() { selection = locker, weight = 25 });
+			lockers[F4].Add(new() { selection = locker, weight = 7 });
+			lockers[F5].Add(new() { selection = locker, weight = 24 });
 
 			yield return "Creating aqua locker...";
 			texs = TextureExtensions.LoadTextureSheet(2, 2, BasePlugin.ModPath, "aquaLocker.png");
@@ -269,7 +323,10 @@ namespace BBPlusLockers.Lockers
 			};
 			AquaLocker.gaugeSprite = AssetLoader.SpriteFromFile(Path.Combine(BasePlugin.ModPath, "aquaLocker_icon.png"), Vector2.one * 0.5f, 1);
 
-			lockers.Add(new() { selection = locker, weight = 7 });
+			lockers[END].Add(new() { selection = locker, weight = 25 });
+			lockers[F3].Add(new() { selection = locker, weight = 14 });
+			lockers[F4].Add(new() { selection = locker, weight = 15 });
+			lockers[F5].Add(new() { selection = locker, weight = 12 });
 
 			locker = new LockerObject(typeof(DecoyAquaLocker))
 			{
@@ -282,8 +339,11 @@ namespace BBPlusLockers.Lockers
 				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "ogNyanCat.wav")), "Vfx_Locker_NyanCat", SoundType.Effect, Color.white),
 				itemAmountToSteal = 0,
 			};
-
-			lockers.Add(new() { selection = locker, weight = 14 });
+			
+			lockers[END].Add(new() { selection = locker, weight = 50 });
+			lockers[F3].Add(new() { selection = locker, weight = 40 });
+			lockers[F4].Add(new() { selection = locker, weight = 35 });
+			lockers[F5].Add(new() { selection = locker, weight = 20 });
 
 			// Baldi Locker
 			yield return "Creating Baldi Locker...";
@@ -303,7 +363,9 @@ namespace BBPlusLockers.Lockers
 			BaldiLocker.audOhHi = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "BAL_Locker.wav")), "Vfx_BAL_SingleHi", SoundType.Voice, Color.green);
 			BaldiLocker.audPop = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "BAL_Locker_Pop.wav")), "Sfx_Effects_Pop", SoundType.Effect, Color.white);
 
-			lockers.Add(new() { selection = locker, weight = 20 });
+			lockers[END].Add(new() { selection = locker, weight = 65 });
+			lockers[F4].Add(new() { selection = locker, weight = 5 });
+			lockers[F5].Add(new() { selection = locker, weight = 20 });
 
 			// Turquoise Locker
 			yield return "Creating turquoise locker...";
@@ -321,7 +383,10 @@ namespace BBPlusLockers.Lockers
 
 			TurquoiseLocker.sprite = AssetLoader.SpriteFromFile(Path.Combine(BasePlugin.ModPath, "turquoiseWater.png"), Vector2.one * 0.5f, 16f);
 
-			lockers.Add(new() { selection = locker, weight = 20 });
+			lockers[END].Add(new() { selection = locker, weight = 35 });
+			lockers[F3].Add(new() { selection = locker, weight =35 });
+			lockers[F4].Add(new() { selection = locker, weight = 16 });
+			lockers[F5].Add(new() { selection = locker, weight = 22 });
 
 			// *** items that opens lockers ***
 			lockerAcceptableItems.Add(BasePlugin.lockpick.itemType);
@@ -334,7 +399,24 @@ namespace BBPlusLockers.Lockers
 
 		readonly static HashSet<Items> lockerAcceptableItems = [];
 
-		internal readonly static List<WeightedSelection<LockerObject>> lockers = [];
+		internal readonly static Dictionary<string, List<WeightedSelection<LockerObject>>> lockers = new() {
+			{END, [new() { selection = null, weight = 100 }]}, // Null means the already default locker (base game blue locker
+			{F1, [new() { selection = null, weight = 100 }]}, // Null means the already default locker (base game blue locker)
+			{F2, [new() { selection = null, weight = 125 }] },
+			{F3, [new() { selection = null, weight = 165 }] },
+			{F4, [new() { selection = null, weight = 135 }] },
+			{F5, [new() { selection = null, weight = 200 }] }
+		};
+
+		internal static List<WeightedSelection<LockerObject>> GetLockers(LevelObject lvlObj) 
+		{
+			if (lvlObj is not CustomLevelObject cLvl)
+				return [];
+			var modval = cLvl.GetCustomModValue(BasePlugin.guid, BasePlugin.customLockersDataKey);
+			if (modval == null || (modval is bool modbool && !modbool))
+				return [];
+			return modval as List<WeightedSelection<LockerObject>>;
+		}
 
 		internal const string textureColorProperty = "_TextureColor";
 

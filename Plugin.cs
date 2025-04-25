@@ -5,7 +5,6 @@ using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Registers;
 using System.IO;
-using MTM101BaldAPI.Reflection;
 using BepInEx.Bootstrap;
 using PixelInternalAPI;
 using System.Collections;
@@ -14,7 +13,7 @@ using PixelInternalAPI.Extensions;
 
 namespace BBPlusLockers.Plugin
 {
-    [BepInPlugin("pixelguy.pixelmodding.baldiplus.bbpluslockers", PluginInfo.PLUGIN_NAME, "1.1.3.2")]
+    [BepInPlugin(guid, PluginInfo.PLUGIN_NAME, "1.1.4")]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.newanimations", BepInDependency.DependencyFlags.SoftDependency)]
@@ -22,9 +21,10 @@ namespace BBPlusLockers.Plugin
 	public class BasePlugin : BaseUnityPlugin
     {
 		internal static bool hasAnimations = false;
+		internal const string guid = "pixelguy.pixelmodding.baldiplus.bbpluslockers", customLockersDataKey = "CustomLockers";
         private void Awake()
         {
-        	Harmony h = new("pixelguy.pixelmodding.baldiplus.bbpluslockers");
+        	Harmony h = new(guid);
 			h.PatchAll();
 
 			ModPath = AssetLoader.GetModPath(this);
@@ -40,15 +40,20 @@ namespace BBPlusLockers.Plugin
 
 			GeneratorManagement.Register(this, GenerationModType.Addend, (x, y, sco) =>
 			{
-				var z = sco.levelObject;
-				if (z == null)
-					return;
-
+				bool added = false;
+				foreach (var z in sco.GetCustomLevelObjects()){
 				z.MarkAsNeverUnload(); // always
+
+				if (LockerCreator.lockers.TryGetValue(x, out var lockerList))
+					z.SetCustomModValue(Info, customLockersDataKey, lockerList);
+
 				if (x == "F1")
 				{
 					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 45 });
-					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 15});
+					if (!added){
+						sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 15 });
+						added = true;
+					}
 					z.forcedItems.Add(lockpick);
 					z.forcedItems.Add(lockpick);
 					return;
@@ -56,7 +61,10 @@ namespace BBPlusLockers.Plugin
 				if (x == "F2")
 				{
 					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 65 }); 
-					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
+					if (!added){
+						sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
+						added = true;
+					}
 					//z.fieldTripItems.Add(new() { selection = lockpick, weight = 5 });
 					z.forcedItems.Add(lockpick);
 					return;
@@ -64,12 +72,34 @@ namespace BBPlusLockers.Plugin
 				if (x == "F3")
 				{
 					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 85 });
-					z.shopItems = z.shopItems.AddToArray(new() { selection = lockpick, weight = 25 });
+					if (!added){
+						sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 25 });
+						added = true;
+					}
 					z.forcedItems.Add(lockpick);
+					return;
+				}
+				if (x == "F4")
+				{
+					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 64 });
+					if (!added){
+						sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 45 });
+						added = true;
+					}
+					return;
+				}
+				if (x == "F5")
+				{
+					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 55 });
+					if (!added){
+						sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
+						added = true;
+					}
 					return;
 				}
 				if (x == "END")
 					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 75 });
+				}
 				
 			});
         }
