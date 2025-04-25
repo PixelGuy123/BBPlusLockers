@@ -42,7 +42,9 @@ namespace BBPlusLockers.Plugin
 			{
 				bool added = false;
 				foreach (var z in sco.GetCustomLevelObjects()){
-				z.MarkAsNeverUnload(); // always
+					z.MarkAsNeverUnload(); // always
+
+				UnityEngine.Debug.Log(z.name);
 
 				if (LockerCreator.lockers.TryGetValue(x, out var lockerList))
 					z.SetCustomModValue(Info, customLockersDataKey, lockerList);

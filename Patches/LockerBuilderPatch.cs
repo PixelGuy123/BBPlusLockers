@@ -35,11 +35,13 @@ namespace BBPlusLockers.Patches
 				new(OpCodes.Ldarg_S, instruction.operand),
 				Transpilers.EmitDelegate<System.Action<MeshRenderer, System.Random>>((x, y) =>
 				{
-					var locker = WeightedSelection<LockerObject>.ControlledRandomSelectionList(
-						LockerCreator.GetLockers(Singleton<BaseGameManager>.Instance.levelObject), 
-						y);
+					if (!LockerCreator.TryGetLockers(Singleton<BaseGameManager>.Instance.levelObject, out var lockersList))
+						return; // No lockers in this level
+
+					var locker = WeightedSelection<LockerObject>.ControlledRandomSelectionList(lockersList, y);
 					if (locker == null)
 						return; // Hideable locker has been chosen (lol)
+
 					locker.CreateLocker(x.gameObject);
 				})
 				)

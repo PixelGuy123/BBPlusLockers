@@ -408,14 +408,17 @@ namespace BBPlusLockers.Lockers
 			{F5, [new() { selection = null, weight = 200 }] }
 		};
 
-		internal static List<WeightedSelection<LockerObject>> GetLockers(LevelObject lvlObj) 
+		internal static bool TryGetLockers(LevelObject lvlObj, out List<WeightedSelection<LockerObject>> lockersList) 
 		{
-			if (lvlObj is not CustomLevelObject cLvl)
-				return [];
+			lockersList = null;
+
+			if (lvlObj == null || lvlObj is not CustomLevelObject cLvl)
+				return false;
 			var modval = cLvl.GetCustomModValue(BasePlugin.guid, BasePlugin.customLockersDataKey);
 			if (modval == null || (modval is bool modbool && !modbool))
-				return [];
-			return modval as List<WeightedSelection<LockerObject>>;
+				return false;
+			lockersList = modval as List<WeightedSelection<LockerObject>>;
+			return true;
 		}
 
 		internal const string textureColorProperty = "_TextureColor";
