@@ -415,7 +415,7 @@ namespace BBPlusLockers.Lockers
 			if (lvlObj == null || lvlObj is not CustomLevelObject cLvl)
 				return false;
 			var modval = cLvl.GetCustomModValue(BasePlugin.guid, BasePlugin.customLockersDataKey);
-			if (modval == null || (modval is bool modbool && !modbool))
+			if (modval == null)
 				return false;
 			lockersList = modval as List<WeightedSelection<LockerObject>>;
 			return true;
