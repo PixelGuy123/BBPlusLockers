@@ -44,61 +44,63 @@ namespace BBPlusLockers.Plugin
 				foreach (var z in sco.GetCustomLevelObjects()){
 					z.MarkAsNeverUnload(); // always
 
-				if (LockerCreator.lockers.TryGetValue(x, out var lockerList))
-					z.SetCustomModValue(Info, customLockersDataKey, lockerList);
+					//UnityEngine.Debug.Log(z.name);
 
-				if (x == "F1")
-				{
-					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 45 });
-					if (!added){
-						sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 15 });
-						added = true;
+					if (LockerCreator.lockers.TryGetValue(x, out var lockerList))
+						z.SetCustomModValue(Info, customLockersDataKey, lockerList);
+
+					if (x == "F1")
+					{
+						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 45 });
+						if (!added){
+							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 15 });
+							added = true;
+						}
+						z.forcedItems.Add(lockpick);
+						z.forcedItems.Add(lockpick);
+						continue;
 					}
-					z.forcedItems.Add(lockpick);
-					z.forcedItems.Add(lockpick);
-					return;
-				}
-				if (x == "F2")
-				{
-					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 65 }); 
-					if (!added){
-						sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
-						added = true;
+					if (x == "F2")
+					{
+						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 65 }); 
+						if (!added){
+							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
+							added = true;
+						}
+						//z.fieldTripItems.Add(new() { selection = lockpick, weight = 5 });
+						z.forcedItems.Add(lockpick);
+						continue;
 					}
-					//z.fieldTripItems.Add(new() { selection = lockpick, weight = 5 });
-					z.forcedItems.Add(lockpick);
-					return;
-				}
-				if (x == "F3")
-				{
-					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 85 });
-					if (!added){
-						sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 25 });
-						added = true;
+					if (x == "F3")
+					{
+						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 85 });
+						if (!added){
+							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 25 });
+							added = true;
+						}
+						z.forcedItems.Add(lockpick);
+						continue;
 					}
-					z.forcedItems.Add(lockpick);
-					return;
-				}
-				if (x == "F4")
-				{
-					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 64 });
-					if (!added){
-						sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 45 });
-						added = true;
+					if (x == "F4")
+					{
+						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 64 });
+						if (!added){
+							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 45 });
+							added = true;
+						}
+						continue;
 					}
-					return;
-				}
-				if (x == "F5")
-				{
-					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 55 });
-					if (!added){
-						sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
-						added = true;
+					if (x == "F5")
+					{
+						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 55 });
+						if (!added){
+							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
+							added = true;
+						}
+						continue;
 					}
-					return;
-				}
-				if (x == "END")
-					z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 75 });
+					if (x == "END")
+						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 75 });
 				}
 				
 			});
