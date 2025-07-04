@@ -1,8 +1,8 @@
-﻿using BBPlusLockers.Lockers;
+﻿using System.Collections.Generic;
+using System.Reflection.Emit;
+using BBPlusLockers.Lockers;
 using HarmonyLib;
 using PixelInternalAPI.Extensions;
-using System.Collections.Generic;
-using System.Reflection.Emit;
 using UnityEngine;
 
 namespace BBPlusLockers.Patches
@@ -23,7 +23,7 @@ namespace BBPlusLockers.Patches
 			.Advance(1)
 			.GetCodeInstruction(out var instruction) // Gets local variable in the operand of this instruction (cRNG)
 
-			.MatchForward(true, 
+			.MatchForward(true,
 				new(OpCodes.Ldarg_0),
 				new(CodeInstruction.LoadField(typeof(Structure_Lockers), "lockerPre")), // Looks for red locker, not blue one anymore
 				new(OpCodes.Ldarg_1),

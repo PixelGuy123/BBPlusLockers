@@ -1,5 +1,5 @@
-﻿using MTM101BaldAPI;
-using System.Collections;
+﻿using System.Collections;
+using MTM101BaldAPI;
 using UnityEngine;
 
 namespace BBPlusLockers.Lockers
@@ -14,10 +14,10 @@ namespace BBPlusLockers.Lockers
 			Singleton<CoreGameManager>.Instance.GetPlayer(player).RuleBreak("Lockers", 1.5f, 0.8f);
 			var baldi = ec.GetBaldi();
 			StartCoroutine(
-				!baldi || 
-				baldi.Navigator.Entity.Frozen || 
-				baldi.Navigator.Entity.InBounds || 
-				Random.value >= 0.15f ? 
+				!baldi ||
+				baldi.Navigator.Entity.Frozen ||
+				baldi.Navigator.Entity.InBounds ||
+				Random.value >= 0.15f ?
 				BuzzNoise() : Baldi()); // Really low chance to be useful lol
 		}
 
@@ -29,10 +29,12 @@ namespace BBPlusLockers.Lockers
 		IEnumerator BuzzNoise()
 		{
 			audMan.PlaySingle(aud_troll);
-			Close(true, true);
+			Close(true, true, 35);
 			SetMainTex(baldos[3]); // index 3 should be the buzz
+
 			while (audMan.AnyAudioIsPlaying)
 				yield return null;
+
 			Close(true, true);
 		}
 
@@ -59,7 +61,7 @@ namespace BBPlusLockers.Lockers
 			Close(true, true);
 		}
 
-		
+
 
 		bool used = false;
 
