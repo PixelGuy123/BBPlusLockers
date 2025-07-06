@@ -46,8 +46,7 @@ namespace BBPlusLockers.Lockers
 				openTex = texs[1],
 				closedTex = texs[0],
 				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "trololo.wav")), "Vfx_Locker_trololo", SoundType.Voice, Color.white),
-				defaultColor = blueLockerColor,
-				itemAmountToSteal = 1
+				defaultColor = blueLockerColor
 			};
 
 			lockers[END].Add(new() { selection = locker, weight = 75 });
@@ -81,8 +80,7 @@ namespace BBPlusLockers.Lockers
 				openTex = texs[1],
 				closedTex = texs[0],
 				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "HA_HA.wav")), "Vfx_Locker_HAHA", SoundType.Voice, Color.white),
-				defaultColor = Color.green,
-				itemAmountToSteal = 0
+				defaultColor = Color.green
 			};
 
 			lockers[F2].Add(new() { selection = locker, weight = 45 });
@@ -118,8 +116,7 @@ namespace BBPlusLockers.Lockers
 				openTex = texs[3],
 				closedTex = texs[2],
 				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "deepHA_HA.wav")), "Vfx_Locker_deepHAHA", SoundType.Voice, Color.white),
-				defaultColor = new(0.01171875f, 0.01171875f, 0.99609375f), // dark blue
-				itemAmountToSteal = 0
+				defaultColor = new(0.01171875f, 0.01171875f, 0.99609375f) // dark blue
 			};
 
 			lockers[F2].Add(new() { selection = locker, weight = 25 });
@@ -156,8 +153,7 @@ namespace BBPlusLockers.Lockers
 				openTex = texs[1],
 				closedTex = texs[0],
 				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "heheheha.wav")), "Vfx_Locker_heheha", SoundType.Voice, Color.white),
-				defaultColor = new(0.99609375f, 0.61328125f, 0.04296875f), // orange
-				itemAmountToSteal = 1
+				defaultColor = new(0.99609375f, 0.61328125f, 0.04296875f) // orange
 			};
 
 			lockers[END].Add(new() { selection = locker, weight = 35 });
@@ -299,8 +295,7 @@ namespace BBPlusLockers.Lockers
 				minDistance = 115f,
 				maxDistance = 165f,
 				aud_troll = GenericExtensions.FindResourceObject<LookAtGuy>().audBlindLoop,
-				itemAmountToSteal = 2,
-				decoyLaughCooldown = 14.5f,
+				decoyLaughCooldown = 14.5f
 			};
 			DecoyLightOrangeLocker.gaugeSprite = GenericExtensions.FindResourceObject<LookAtGuy>().gaugeSprite;
 
@@ -328,6 +323,8 @@ namespace BBPlusLockers.Lockers
 			lockers[F4].Add(new() { selection = locker, weight = 15 });
 			lockers[F5].Add(new() { selection = locker, weight = 12 });
 
+			SoundObject aquaTrollSound = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "ogNyanCat.wav")), "Vfx_Locker_NyanCat", SoundType.Effect, Color.white);
+
 			locker = new LockerObject(typeof(DecoyAquaLocker))
 			{
 				aud_openLocker = defaultAudio,
@@ -336,8 +333,8 @@ namespace BBPlusLockers.Lockers
 				defaultColor = new(0.203125f, 0.671875f, 0.546875f),
 				minDistance = 65f,
 				maxDistance = 90f,
-				aud_troll = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "ogNyanCat.wav")), "Vfx_Locker_NyanCat", SoundType.Effect, Color.white),
-				itemAmountToSteal = 0,
+				aud_troll = aquaTrollSound,
+				decoyLaughCooldown = aquaTrollSound.soundClip.length
 			};
 
 			lockers[END].Add(new() { selection = locker, weight = 50 });
@@ -357,8 +354,7 @@ namespace BBPlusLockers.Lockers
 				defaultColor = new(0, 0.99609375f, 0.5625f),
 				minDistance = 65f,
 				maxDistance = 90f,
-				aud_troll = GenericExtensions.FindResourceObjectByName<SoundObject>("Elv_Buzz"),
-				itemAmountToSteal = 0,
+				aud_troll = GenericExtensions.FindResourceObjectByName<SoundObject>("Elv_Buzz")
 			};
 			BaldiLocker.audOhHi = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "BAL_Locker.wav")), "Vfx_BAL_SingleHi", SoundType.Voice, Color.green);
 			BaldiLocker.audPop = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromFile(Path.Combine(BasePlugin.ModPath, "BAL_Locker_Pop.wav")), "Sfx_Effects_Pop", SoundType.Effect, Color.white);

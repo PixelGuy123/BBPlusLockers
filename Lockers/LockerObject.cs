@@ -1,5 +1,5 @@
-﻿using BBPlusLockers.Lockers.DecoyLockers;
-using System;
+﻿using System;
+using BBPlusLockers.Lockers.DecoyLockers;
 using UnityEngine;
 using static UnityEngine.Object;
 
@@ -12,8 +12,6 @@ namespace BBPlusLockers.Lockers
 		public Texture2D openTex;
 
 		public SoundObject aud_openLocker;
-
-		public int itemAmountToSteal = 1;
 
 		public SoundObject aud_troll;
 
@@ -42,7 +40,6 @@ namespace BBPlusLockers.Lockers
 			t.aud_troll = aud_troll; // Aud troll for normal lockers because black locker exists
 			if (t is DecoyLocker decLoc)
 			{
-				decLoc.itemAmountToSteal = itemAmountToSteal;
 				decLoc.laughCooldown = decoyLaughCooldown;
 			}
 			var mat = target.GetComponent<MeshRenderer>();

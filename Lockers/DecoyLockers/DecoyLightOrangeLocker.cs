@@ -15,14 +15,9 @@ namespace BBPlusLockers.Lockers.DecoyLockers
 		protected override void ScammedPlayer(PlayerManager pm)
 		{
 			base.ScammedPlayer(pm);
-			int points = Singleton<CoreGameManager>.Instance.GetPoints(pm.playerNumber);
-			Singleton<CoreGameManager>.Instance.AddPoints(
-				-Mathf.Min(points, Random.Range(165, 260)) // Mathf Min to prevent negative points
-			, pm.playerNumber,
-			true);
 
 			ec.AddTimeScale(timeScale);
-			SlideTimeScaleTo(1.25f, false);
+			SlideTimeScaleTo(1.75f, false);
 			gaugeIcon = gaugeSprite;
 		}
 

@@ -23,7 +23,7 @@ namespace BBPlusLockers.Lockers.DecoyLockers
 		{
 			base.AfterTrollAndClose(pm);
 			for (int i = 0; i < trigger.entities.Count; i++)
-				trigger.entities[i].AddForce(new((trigger.entities[i].transform.position - transform.position).normalized, 105f, -45f));
+				trigger.entities[i].AddForce(new((transform.position - trigger.entities[i].transform.position).normalized, 105f, -45f)); // Reverse: pulls everyone into it
 
 		}
 

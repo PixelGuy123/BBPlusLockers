@@ -1,8 +1,7 @@
 ﻿using System.Collections;
-using UnityEngine;
 using MTM101BaldAPI.Components;
 using MTM101BaldAPI.PlusExtensions;
-using MTM101BaldAPI;
+using UnityEngine;
 
 namespace BBPlusLockers.Lockers
 {
@@ -30,7 +29,8 @@ namespace BBPlusLockers.Lockers
 			statModifier.AddModifier("runSpeed", modifier);
 
 			float timer = speedTime;
-			while (timer > 0f){
+			while (timer > 0f)
+			{
 				timer -= ec.EnvironmentTimeScale * Time.deltaTime;
 				gauge.SetValue(speedTime, timer);
 				yield return null;
@@ -43,7 +43,7 @@ namespace BBPlusLockers.Lockers
 
 		internal static Sprite gaugeSprite;
 
-		protected HudGauge gauge;			
+		protected HudGauge gauge;
 	}
 
 }

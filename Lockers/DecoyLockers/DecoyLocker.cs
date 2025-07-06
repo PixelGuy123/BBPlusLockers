@@ -8,14 +8,11 @@ namespace BBPlusLockers.Lockers.DecoyLockers
 	{
 		protected void OpenAndScamPlayer(PlayerManager pm)
 		{
-			for (int i = 0; i < itemAmountToSteal; i++)
-				pm.itm.RemoveRandomItem();
-
-			ScammedPlayer(pm);
 			pm.RuleBreak("Lockers", 1.5f, 0.8f);
 			Close(false, true, 65);
 			audMan.PlaySingle(aud_troll);
 			StartCoroutine(Cooldown(pm));
+			ScammedPlayer(pm);
 			opened = true;
 		}
 
@@ -33,7 +30,8 @@ namespace BBPlusLockers.Lockers.DecoyLockers
 			{
 				bool hasGauge = gaugeIcon != null;
 				float totalTime = laughCooldown;
-				if (hasGauge){
+				if (hasGauge)
+				{
 					gauge = Singleton<CoreGameManager>.Instance.GetHud(pm.playerNumber).gaugeManager.ActivateNewGauge(gaugeIcon, laughCooldown);
 				}
 
@@ -58,8 +56,6 @@ namespace BBPlusLockers.Lockers.DecoyLockers
 
 		protected bool opened = false;
 		public bool KeepTrollOpen { get; protected set; } = false;
-
-		public int itemAmountToSteal = 1;
 
 		public float laughCooldown = -1f;
 		protected Sprite gaugeIcon;
