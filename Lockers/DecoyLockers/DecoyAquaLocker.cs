@@ -16,23 +16,40 @@ namespace BBPlusLockers.Lockers.DecoyLockers
 			base.ScammedPlayer(pm);
 			audMan.FlushQueue(true);
 			nyanAudMan.QueueAudio(aud_troll);
-			StartCoroutine(NYANCAT(pm));
+			if (NYANCATCor != null)
+			{
+				pm.Am.moveMods.Remove(moveMod);
+				StopCoroutine(NYANCATCor);
+			}
+			pm.Am.moveMods.Add(moveMod);
+			NYANCATCor = StartCoroutine(NYANCAT(pm));
+		}
+
+		protected override void AfterTrollAndClose(PlayerManager pm)
+		{
+			base.AfterTrollAndClose(pm);
+			if (NYANCATCor != null)
+			{
+				pm.Am.moveMods.Remove(moveMod);
+				StopCoroutine(NYANCATCor);
+			}
 		}
 
 		IEnumerator NYANCAT(PlayerManager pm)
 		{
-			pm.Am.moveMods.Add(moveMod);
+			yield return null;
 			var cam = Singleton<CoreGameManager>.Instance.GetCamera(pm.playerNumber);
 			while (opened)
 			{
 				moveMod.movementAddend = cam.transform.forward * backwardsSpeed;
 				yield return null;
 			}
-			pm.Am.moveMods.Remove(moveMod);
+
 		}
 
 		readonly MovementModifier moveMod = new(Vector3.zero, 0f);
 		AudioManager nyanAudMan;
-		internal float backwardsSpeed = -23f;
+		Coroutine NYANCATCor;
+		internal float backwardsSpeed = -45f;
 	}
 }
