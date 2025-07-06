@@ -1,11 +1,11 @@
 ﻿using System.Collections;
-using UnityEngine;
 using System.Collections.Generic;
 using PixelInternalAPI.Classes;
+using UnityEngine;
 
 namespace BBPlusLockers.Lockers
 {
-	public class DarkBlueLocker : Locker, IItemAcceptor
+	public class DarkBlueLocker : Locker, IClickable<int>
 	{
 
 		protected override void AwakeFunc()
@@ -22,18 +22,23 @@ namespace BBPlusLockers.Lockers
 			collider.GetComponent<DarkBlueLockerTrigger>().locker = this;
 			collider.gameObject.layer = LayerStorage.ignoreRaycast;
 		}
-		public void InsertItem(PlayerManager pm, EnvironmentController ec)
+
+		public void Clicked(int player)
 		{
+			if (cooldown > 0f) return;
+			var pm = Singleton<CoreGameManager>.Instance.GetPlayer(player);
+
 			force = 0f;
 			cooldown = 35f;
 			Close(false, true, 45);
 			pm.plm.Entity.AddForce(new((pm.transform.position - transform.position).normalized, 6f, -4f));
-			pm.RuleBreak("Lockers", 1.2f, 0.5f);			
+			pm.RuleBreak("Lockers", 1.2f, 0.5f);
 			StartCoroutine(Vacuum(ec));
 		}
-
-		public bool ItemFits(Items i) =>
-			cooldown <= 0f && LockerCreator.CanOpenLocker(i);
+		public void ClickableSighted(int player) { }
+		public bool ClickableHidden() => cooldown > 0f;
+		public bool ClickableRequiresNormalHeight() => true;
+		public void ClickableUnsighted(int player) { }
 
 		float cooldown = 0f, force = 0f;
 

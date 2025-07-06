@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BBPlusLockers.Lockers.DecoyLockers
 {
-	public class DecoyOrangeLocker : AcceptorDecoyLocker
+	public class DecoyOrangeLocker : ClickableDecoyLocker
 	{
 		protected override void AwakeFunc()
 		{

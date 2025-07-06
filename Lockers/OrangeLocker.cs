@@ -1,11 +1,11 @@
-﻿using PixelInternalAPI.Classes;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using PixelInternalAPI.Classes;
 using UnityEngine;
 
 namespace BBPlusLockers.Lockers
 {
-	public class OrangeLocker : Locker, IItemAcceptor
+	public class OrangeLocker : Locker, IClickable<int>
 	{
 		protected override void AwakeFunc()
 		{
@@ -20,16 +20,21 @@ namespace BBPlusLockers.Lockers
 
 			trigger = collider.gameObject.AddComponent<OrangeLockerTrigger>();
 		}
-		public void InsertItem(PlayerManager pm, EnvironmentController ec)
+		public void Clicked(int player)
 		{
+			if (cooldown > 0) return;
+
+			var pm = Singleton<CoreGameManager>.Instance.GetPlayer(player);
+
 			cooldown = 30f;
 			pm.RuleBreak("Lockers", 1.2f, 0.5f);
 			Close(false, true, 72);
 			StartCoroutine(PushAndWait(ec));
 		}
-
-		public bool ItemFits(Items i) =>
-			cooldown <= 0f && LockerCreator.CanOpenLocker(i);
+		public void ClickableSighted(int player) { }
+		public bool ClickableHidden() => cooldown > 0;
+		public bool ClickableRequiresNormalHeight() => true;
+		public void ClickableUnsighted(int player) { }
 
 		float cooldown = 0f;
 
@@ -59,7 +64,7 @@ namespace BBPlusLockers.Lockers
 
 			for (int i = 0; i < trigger.entities.Count; i++)
 				trigger.entities[i].AddForce(new((trigger.entities[i].transform.position - transform.position).normalized, 75f, -25f));
-			
+
 
 			while (cooldown > 0f)
 			{

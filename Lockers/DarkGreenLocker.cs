@@ -1,11 +1,11 @@
-﻿using PixelInternalAPI.Classes;
+﻿using System.Collections;
+using PixelInternalAPI.Classes;
 using PixelInternalAPI.Extensions;
-using System.Collections;
 using UnityEngine;
 
 namespace BBPlusLockers.Lockers
 {
-	public class DarkGreenLocker : Locker, IItemAcceptor
+	public class DarkGreenLocker : Locker, IClickable<int>
 	{
 		protected override void AwakeFunc()
 		{
@@ -37,11 +37,13 @@ namespace BBPlusLockers.Lockers
 
 		void BlockTiles(bool block, EnvironmentController ec) =>
 				Directions.All().ForEach(dir => ec.CellFromPosition(pos + dir.ToIntVector2())?.Block(dir.GetOpposite(), block));
-		
 
-		public void InsertItem(PlayerManager pm, EnvironmentController ec)
+		public void Clicked(int player)
 		{
+			if (!openable) return;
+
 			openable = false;
+			var pm = Singleton<CoreGameManager>.Instance.GetPlayer(player);
 			pm.RuleBreak("Lockers", 1.2f, 0.5f);
 			blocker.gameObject.SetActive(true);
 			Close(false, true, 35);
@@ -49,14 +51,17 @@ namespace BBPlusLockers.Lockers
 
 			StartCoroutine(SpawnTheBlocker(pm, ec));
 		}
-
+		public void ClickableSighted(int player) { }
+		public bool ClickableHidden() => !openable;
+		public bool ClickableRequiresNormalHeight() => true;
+		public void ClickableUnsighted(int player) { }
 		IEnumerator SpawnTheBlocker(PlayerManager pm, EnvironmentController ec)
 		{
 			float scale = 0f;
 			Vector3 pos = transform.position + Vector3.up * 3f;
 			Vector3 ogPos = pos;
 			Cell blockCell = ec.CellFromPosition(supposedPos);
-			
+
 
 			while (true)
 			{
@@ -68,7 +73,7 @@ namespace BBPlusLockers.Lockers
 
 				if (ec.CellFromPosition(pm.transform.position) == blockCell)
 					pm.plm.Entity.AddForce(new(pm.transform.position - supposedPos, 5f, -5f));
-				
+
 				blocker.position = pos;
 				blocker.localScale = Vector3.one * scale;
 
@@ -114,9 +119,6 @@ namespace BBPlusLockers.Lockers
 
 			yield break;
 		}
-
-		public bool ItemFits(Items i) =>
-			openable && LockerCreator.CanOpenLocker(i);
 
 		bool openable = true;
 

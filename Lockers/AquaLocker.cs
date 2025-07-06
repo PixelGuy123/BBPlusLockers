@@ -7,7 +7,6 @@ namespace BBPlusLockers.Lockers
 {
 	public class AquaLocker : Locker, IItemAcceptor
 	{
-
 		public void InsertItem(PlayerManager player, EnvironmentController ec)
 		{
 			used = true;

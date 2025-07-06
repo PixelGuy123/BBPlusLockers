@@ -4,27 +4,24 @@ using UnityEngine;
 
 namespace BBPlusLockers.Lockers
 {
-	public class BaldiLocker : Locker, IClickable<int>
+	public class BaldiLocker : Locker, IItemAcceptor
 	{
-		public void Clicked(int player)
+		public void InsertItem(PlayerManager player, EnvironmentController ec)
 		{
 			if (used) return;
 
 			used = true;
-			Singleton<CoreGameManager>.Instance.GetPlayer(player).RuleBreak("Lockers", 1.5f, 0.8f);
+			player.RuleBreak("Lockers", 1.5f, 0.8f);
 			var baldi = ec.GetBaldi();
 			StartCoroutine(
 				!baldi ||
 				baldi.Navigator.Entity.Frozen ||
 				baldi.Navigator.Entity.InBounds ||
-				Random.value >= 0.15f ?
+				Random.value <= 0.75f ? // 75% of Buzz, 25% of Baldi
 				BuzzNoise() : Baldi()); // Really low chance to be useful lol
 		}
-
-		public bool ClickableHidden() => used;
-		public bool ClickableRequiresNormalHeight() => true;
-		public void ClickableSighted(int player) { }
-		public void ClickableUnsighted(int player) { }
+		public bool ItemFits(Items item) =>
+			!used && LockerCreator.CanOpenLocker(item);
 
 		IEnumerator BuzzNoise()
 		{

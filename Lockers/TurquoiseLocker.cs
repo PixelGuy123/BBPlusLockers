@@ -1,13 +1,13 @@
-﻿using MTM101BaldAPI;
-using PixelInternalAPI.Extensions;
-using PixelInternalAPI.Classes;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using MTM101BaldAPI;
+using PixelInternalAPI.Classes;
+using PixelInternalAPI.Extensions;
 using UnityEngine;
 
 namespace BBPlusLockers.Lockers
 {
-	public class TurquoiseLocker : Locker, IItemAcceptor
+	public class TurquoiseLocker : Locker, IClickable<int>
 	{
 		protected override void AwakeFunc()
 		{
@@ -25,17 +25,23 @@ namespace BBPlusLockers.Lockers
 
 			water.gameObject.SetActive(false);
 		}
-		
 
-		public void InsertItem(PlayerManager pm, EnvironmentController ec)
+		public void Clicked(int player)
 		{
+			if (!openable) return;
+
 			openable = false;
+			var pm = Singleton<CoreGameManager>.Instance.GetPlayer(player);
 			pm.RuleBreak("Lockers", 1.2f, 0.5f);
 			water.gameObject.SetActive(true);
 			Close(false, true, 35);
 
 			StartCoroutine(SpawnTheBlocker(ec));
 		}
+		public void ClickableSighted(int player) { }
+		public bool ClickableHidden() => !openable;
+		public bool ClickableRequiresNormalHeight() => true;
+		public void ClickableUnsighted(int player) { }
 
 		IEnumerator SpawnTheBlocker(EnvironmentController ec)
 		{
@@ -68,9 +74,6 @@ namespace BBPlusLockers.Lockers
 
 			yield break;
 		}
-
-		public bool ItemFits(Items i) =>
-			openable && LockerCreator.CanOpenLocker(i);
 
 		bool openable = true;
 

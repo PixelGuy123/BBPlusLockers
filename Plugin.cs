@@ -52,17 +52,26 @@ namespace BBPlusLockers.Plugin
 
 					if (x == "F1")
 					{
-						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 45 });
+						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 35 });
 						if (!added)
 						{
-							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 15 });
+							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 55 });
 							added = true;
 						}
-						z.forcedItems.Add(lockpick);
-						z.forcedItems.Add(lockpick);
 						continue;
 					}
 					if (x == "F2")
+					{
+						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 55 });
+						if (!added)
+						{
+							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 45 });
+							added = true;
+						}
+						z.forcedItems.Add(lockpick);
+						continue;
+					}
+					if (x == "F3")
 					{
 						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 65 });
 						if (!added)
@@ -70,27 +79,14 @@ namespace BBPlusLockers.Plugin
 							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
 							added = true;
 						}
-						//z.fieldTripItems.Add(new() { selection = lockpick, weight = 5 });
-						z.forcedItems.Add(lockpick);
-						continue;
-					}
-					if (x == "F3")
-					{
-						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 85 });
-						if (!added)
-						{
-							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 25 });
-							added = true;
-						}
-						z.forcedItems.Add(lockpick);
 						continue;
 					}
 					if (x == "F4")
 					{
-						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 64 });
+						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 35 });
 						if (!added)
 						{
-							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 45 });
+							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 15 });
 							added = true;
 						}
 						continue;

@@ -1,12 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using MTM101BaldAPI.Components;
 using PixelInternalAPI.Classes;
 using PixelInternalAPI.Extensions;
+using UnityEngine;
 
 namespace BBPlusLockers.Lockers
 {
-	public class PurpleLocker : Locker, IItemAcceptor
+	public class PurpleLocker : Locker, IClickable<int>
 	{
 		protected override void AwakeFunc()
 		{
@@ -40,17 +40,22 @@ namespace BBPlusLockers.Lockers
 			portal.Initialize();
 		}
 
-		public void InsertItem(PlayerManager player, EnvironmentController ec)
+		public void Clicked(int player)
 		{
+			if (active) return;
+
+			var pm = Singleton<CoreGameManager>.Instance.GetPlayer(player);
 			active = true;
 			Close(false, true, 78);
-			trigger.prevTarget = player.plm.Entity;
+			trigger.prevTarget = pm.plm.Entity;
 			trigger.gameObject.SetActive(true);
 			StartCoroutine(WaitForWarp(ec));
 		}
-		public bool ItemFits(Items item) =>
-			!active && LockerCreator.CanOpenLocker(item);
-		
+		public void ClickableSighted(int player) { }
+		public bool ClickableHidden() => active;
+		public bool ClickableRequiresNormalHeight() => true;
+		public void ClickableUnsighted(int player) { }
+
 		IEnumerator SpawnTeleporter(EnvironmentController ec, Vector3 pos, bool despawn)
 		{
 			if (!despawn)
@@ -72,7 +77,7 @@ namespace BBPlusLockers.Lockers
 				{
 					cooldown -= ec.EnvironmentTimeScale * Time.deltaTime;
 					yield return null;
-				}	
+				}
 				float scale = 1f;
 				while (scale > 0f)
 				{
@@ -107,7 +112,7 @@ namespace BBPlusLockers.Lockers
 				overrider.SetInteractionState(false);
 			}
 
-			
+
 
 			float t = 0f;
 			Vector3 pos = e.transform.position;
@@ -128,7 +133,7 @@ namespace BBPlusLockers.Lockers
 				if (pm)
 					pm.GetCustomCam().ReverseSlideFOVAnimation(new ValueModifier(), 35f, 3.5f);
 
-				
+
 				overrider.SetHeight(sinkHeight);
 			}
 
@@ -169,7 +174,7 @@ namespace BBPlusLockers.Lockers
 		internal Entity foundTarget = null;
 
 		const float tpSpeed = 0.35f, sinkSpeed = 0.25f, sinkHeight = 0.5f;
-			
+
 	}
 
 	public class PurpleLockerTrigger : MonoBehaviour

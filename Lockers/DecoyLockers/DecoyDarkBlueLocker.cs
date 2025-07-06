@@ -1,11 +1,11 @@
-﻿using PixelInternalAPI.Classes;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using PixelInternalAPI.Classes;
 using UnityEngine;
 
 namespace BBPlusLockers.Lockers.DecoyLockers
 {
-	public class DecoyDarkBlueLocker : AcceptorDecoyLocker
+	public class DecoyDarkBlueLocker : ClickableDecoyLocker
 	{
 
 		protected override void AwakeFunc()
