@@ -274,7 +274,7 @@ namespace BBPlusLockers.Lockers
 				aud_openLocker = defaultAudio,
 				openTex = texs[3],
 				closedTex = texs[2],
-				defaultColor = new(0.98046875f, 0.23046875f, 0.015625f),
+				defaultColor = new(0.99609375f, 0.7421875f, 0f),
 				minDistance = 75f,
 				maxDistance = 85f
 			};

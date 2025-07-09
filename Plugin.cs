@@ -13,7 +13,7 @@ using PixelInternalAPI.Extensions;
 
 namespace BBPlusLockers.Plugin
 {
-	[BepInPlugin(guid, PluginInfo.PLUGIN_NAME, "1.1.5")]
+	[BepInPlugin(guid, PluginInfo.PLUGIN_NAME, "1.1.6")]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.newanimations", BepInDependency.DependencyFlags.SoftDependency)]
