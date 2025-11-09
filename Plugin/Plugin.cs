@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.IO;
-using BBPlusLockers.Lockers;
 using BepInEx;
 using BepInEx.Bootstrap;
 using HarmonyLib;
@@ -13,18 +12,17 @@ using PixelInternalAPI.Extensions;
 
 namespace BBPlusLockers.Plugin
 {
-	[BepInPlugin(guid, PluginInfo.PLUGIN_NAME, "1.1.6")]
+	[BepInPlugin(GUIDs.EXTRALOCKERS, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.newanimations", BepInDependency.DependencyFlags.SoftDependency)]
 
-	public class BasePlugin : BaseUnityPlugin
+	public partial class ExtraLockersPlugin : BaseUnityPlugin
 	{
 		internal static bool hasAnimations = false;
-		internal const string guid = "pixelguy.pixelmodding.baldiplus.bbpluslockers", customLockersDataKey = "CustomLockers";
 		private void Awake()
 		{
-			Harmony h = new(guid);
+			Harmony h = new(GUIDs.EXTRALOCKERS);
 			h.PatchAll();
 
 			ModPath = AssetLoader.GetModPath(this);

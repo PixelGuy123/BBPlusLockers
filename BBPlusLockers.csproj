@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
     <AssemblyName>BBPlusLockers</AssemblyName>
-    <Description>My first plugin</Description>
-    <Version>1.0.0</Version>
+    <Description>Adds new lockers to the game and more!</Description>
+    <Version>2.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -24,24 +24,21 @@
    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all" />
    <Reference Include="C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BALDI_Data\Managed\Assembly-CSharp.dll" Publicize="true" />
     <Reference Include="MTM101BaldAPI">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BepInEx\plugins\MTM101BaldAPI.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BepInEx\plugins\MTM101BaldAPI.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BALDI_Data\Managed\netstandard.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BALDI_Data\Managed\netstandard.dll</HintPath>
     </Reference>
     <Reference Include="PixelInternalAPI">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BepInEx\plugins\PixelInternalAPI.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BepInEx\plugins\PixelInternalAPI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BALDI_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BALDI_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Patches\" />
-  </ItemGroup>
+
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy /y &quot;C:\Users\JV\OneDrive\Documentos\GitHub\BB+ Extra Lockers\bin\Release\net46\BBPlusLockers.dll&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BepInEx\plugins&quot;&#xD;&#xA;copy /y &quot;C:\Users\JV\OneDrive\Documentos\GitHub\BB+ Extra Lockers\bin\Release\net46\BBPlusLockers.pdb&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BepInEx\plugins&quot;" />
+    <Exec Command="copy /y &quot;$(OutputPath)$(AssemblyName).dll&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BepInEx\plugins&quot;&#xD;&#xA;copy /y &quot;$(OutputPath)$(AssemblyName).pdb&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BepInEx\plugins&quot;" />
   </Target>
 </Project>
