@@ -1,25 +1,21 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using BepInEx;
-using BepInEx.Bootstrap;
 using HarmonyLib;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
-using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
-using PixelInternalAPI;
-using PixelInternalAPI.Extensions;
 
 namespace BBPlusLockers.Plugin
 {
 	[BepInPlugin(GUIDs.EXTRALOCKERS, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
-	[BepInDependency("pixelguy.pixelmodding.baldiplus.newanimations", BepInDependency.DependencyFlags.SoftDependency)]
 
 	public partial class ExtraLockersPlugin : BaseUnityPlugin
 	{
-		internal static bool hasAnimations = false;
+		public static AssetManager assetMan = new();
 		private void Awake()
 		{
 			Harmony h = new(GUIDs.EXTRALOCKERS);
@@ -29,110 +25,40 @@ namespace BBPlusLockers.Plugin
 
 			AssetLoader.LoadLocalizationFolder(Path.Combine(ModPath, "Language", "English"), Language.English);
 
-			LoadingEvents.RegisterOnAssetsLoaded(Info, CreateLockPick(), LoadingEventOrder.Pre);
-			LoadingEvents.RegisterOnAssetsLoaded(Info, LockerCreator.InitializeAssets(), LoadingEventOrder.Pre);
+			LoadingEvents.RegisterOnAssetsLoaded(Info, CreateAssets(), LoadingEventOrder.Pre);
+			// LoadingEvents.RegisterOnAssetsLoaded(Info, LockerCreator.InitializeAssets(), LoadingEventOrder.Pre);
+			// LoadingEvents.RegisterOnAssetsLoaded(Info, GreenLocker.InitializeItemSelection, LoadingEventOrder.Post); // After all the items are added from any mod
 
-			LoadingEvents.RegisterOnAssetsLoaded(Info, GreenLocker.InitializeItemSelection, LoadingEventOrder.Post); // After all the items are added from any mod
-
-			hasAnimations = Chainloader.PluginInfos.ContainsKey("pixelguy.pixelmodding.baldiplus.newanimations");
-
-			GeneratorManagement.Register(this, GenerationModType.Addend, (x, y, sco) =>
-			{
-				bool added = false;
-				foreach (var z in sco.GetCustomLevelObjects())
-				{
-					z.MarkAsNeverUnload(); // always
-
-					//UnityEngine.Debug.Log(z.name);
-
-					if (LockerCreator.lockers.TryGetValue(x, out var lockerList))
-						z.SetCustomModValue(Info, customLockersDataKey, lockerList);
-
-					if (x == "F1")
-					{
-						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 35 });
-						if (!added)
-						{
-							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 55 });
-							added = true;
-						}
-						continue;
-					}
-					if (x == "F2")
-					{
-						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 55 });
-						if (!added)
-						{
-							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 45 });
-							added = true;
-						}
-						z.forcedItems.Add(lockpick);
-						continue;
-					}
-					if (x == "F3")
-					{
-						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 65 });
-						if (!added)
-						{
-							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
-							added = true;
-						}
-						continue;
-					}
-					if (x == "F4")
-					{
-						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 35 });
-						if (!added)
-						{
-							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 15 });
-							added = true;
-						}
-						continue;
-					}
-					if (x == "F5")
-					{
-						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 55 });
-						if (!added)
-						{
-							sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = 35 });
-							added = true;
-						}
-						continue;
-					}
-					if (x == "END")
-						z.potentialItems = z.potentialItems.AddToArray(new() { selection = lockpick, weight = 75 });
-				}
-
-			});
+			GeneratorManagement.Register(this, GenerationModType.Addend, RegisterGenerationChanges);
 		}
 
-		IEnumerator CreateLockPick()
+		IEnumerator CreateAssets()
 		{
-			yield return 1;
-			yield return "Creating lock pick...";
-			var item = new ItemBuilder(Info)
-				.SetEnum("Lockpick")
-				.SetShopPrice(350)
-				.SetGeneratorCost(20)
-				.SetItemComponent<ITM_Acceptable>()
-				.SetSprites(AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromFile(Path.Combine(ModPath, "lockpick_small.png")), 1f),
-				AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromFile(Path.Combine(ModPath, "lockpick.png")), 50f))
-				.SetNameAndDescription("LPC_Name", "LPC_Desc")
-				.SetMeta(ItemFlags.None, ["StackableItems_NotAllowStacking"])
-				.Build();
-			((ITM_Acceptable)item.item).item = item.itemType;
-			((ITM_Acceptable)item.item).layerMask = GenericExtensions.FindResourceObjectByName<LayerMaskObject>("PlayerClickLayerMask");
+			yield return 2;
+			yield return "Creating lockpick...";
+			CreateLockpick();
+			yield return "Creating locker assets...";
+		}
 
-			lockpick = item;
-			lockpick.AddKeyTypeItem();
+		void RegisterGenerationChanges(string lvlname, int lvlNum, SceneObject sco)
+		{
+			// Scene Object Changes
+			if (shopLockpickWeightsByLevel.TryGetValue(lvlname, out int shopWeight))
+				sco.shopItems = sco.shopItems.AddToArray(new() { selection = lockpick, weight = shopWeight });
 
-			ResourceManager.AddWeightedItemToCrazyMachine(new() { selection = lockpick, weight = 55 });
-			ResourceManager.AddPostGenCallback((_) => FindObjectsOfType<Locker>().Do(x => x.AfterGenCall()));
+			// LevelObject changes
+			bool modified;
+			foreach (var ld in sco.GetCustomLevelObjects())
+			{
+				if (ld.IsModifiedByMod(Info)) continue;
+				// Lockpick setup
+				modified = AddLockpickToLevelObject(ld, lvlname);
+
+				if (modified)
+					ld.MarkAsModifiedByMod(Info);
+			}
 		}
 
 		public static string ModPath = string.Empty;
-
-		internal static ItemObject lockpick; // Will be useful for custom lockers to check for the lockpick;
-
 	}
 }
