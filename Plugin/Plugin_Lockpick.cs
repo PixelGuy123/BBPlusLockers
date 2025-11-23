@@ -29,6 +29,15 @@ public partial class ExtraLockersPlugin
             {"F5", 15},
             {"END", 30}
         };
+    readonly Dictionary<string, StructureParameters> customLockerParameters = new()
+    {
+        { "F1", new() { chance = [0.05f] } },
+        { "F2", new() { chance = [0.06f] } },
+        { "F3", new() { chance = [0.1f] } },
+        { "F4", new() { chance = [0.17f] } },
+        { "F5", new() { chance = [0.25f] } },
+        { "END", new() { chance = [0.3f] } },
+    };
 
     // ******** METHODS *********
     void CreateLockpick()

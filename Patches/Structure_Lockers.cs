@@ -14,11 +14,18 @@ static class Structure_Lockers_Patch
     static IEnumerable<CodeInstruction> FindMeshRendererAndRegisterIt(IEnumerable<CodeInstruction> i) =>
         new CodeMatcher(i)
         .End() // Goes to the end
-        .InsertAndAdvance(
+        .MatchBack(
+            false,
+            new(OpCodes.Ldloc_0), // num += sign
+            new(OpCodes.Ldarg_3),
+            new(OpCodes.Add),
+            new(OpCodes.Stloc_0)
+            )
+        .InsertAndAdvance( // Structure_CustomLockers.replaceableLockers.Add(meshRenderer)
             CodeInstruction.LoadField(typeof(Structure_CustomLockers), nameof(Structure_CustomLockers.replaceableLockers)), // Loads the list into the stack
             new CodeInstruction(OpCodes.Ldloc_1),                                                                           // Loads mesh renderer into the stack
-            CodeInstruction.Call(typeof(MeshRenderer), nameof(MeshRenderer.gameObject)),                                    // Get the gameObject
-            CodeInstruction.Call(typeof(List<GameObject>), nameof(List<>.Add))                                              // Adds the gameObject inside the list
+            new CodeInstruction(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Component), "gameObject")),             // Get the gameObject
+            CodeInstruction.Call(typeof(List<GameObject>), "Add")                                                           // Adds the gameObject inside the list
         )
         .InstructionEnumeration();
 }

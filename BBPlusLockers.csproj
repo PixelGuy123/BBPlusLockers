@@ -35,6 +35,18 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BALDI_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
+    <Reference Include="PlusLevelStudio">
+	   <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BepInEx\plugins\newEditor\PlusLevelStudio.dll</HintPath>
+	 </Reference>
+   <Reference Include="PlusStudioLevelFormat">
+	   <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BepInEx\plugins\newEditor\PlusStudioLevelFormat.dll</HintPath>
+	 </Reference>
+   <Reference Include="PlusStudioLevelLoader">
+	   <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BepInEx\plugins\newEditor\PlusStudioLevelLoader.dll</HintPath>
+	 </Reference>
+   <Reference Include="Unity.TextMeshPro">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BALDI_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   

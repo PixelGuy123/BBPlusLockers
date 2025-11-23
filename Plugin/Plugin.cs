@@ -1,18 +1,22 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.IO;
+using BBPlusLockers.Compats;
+using BBPlusLockers.Structures;
 using BepInEx;
+using BepInEx.Bootstrap;
 using HarmonyLib;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Registers;
+using PixelInternalAPI;
 
 namespace BBPlusLockers.Plugin
 {
 	[BepInPlugin(GUIDs.EXTRALOCKERS, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 	[BepInDependency("mtm101.rulerp.bbplus.baldidevapi", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInDependency("pixelguy.pixelmodding.baldiplus.pixelinternalapi", BepInDependency.DependencyFlags.HardDependency)]
-
+	[BepInDependency(GUIDs.LOADER, BepInDependency.DependencyFlags.SoftDependency)]
+	[BepInDependency(GUIDs.STUDIO, BepInDependency.DependencyFlags.SoftDependency)]
 	public partial class ExtraLockersPlugin : BaseUnityPlugin
 	{
 		public static AssetManager assetMan = new();
@@ -30,6 +34,12 @@ namespace BBPlusLockers.Plugin
 			// LoadingEvents.RegisterOnAssetsLoaded(Info, GreenLocker.InitializeItemSelection, LoadingEventOrder.Post); // After all the items are added from any mod
 
 			GeneratorManagement.Register(this, GenerationModType.Addend, RegisterGenerationChanges);
+
+			// Very very important for clearing out after a new generation iteration happens
+			ResourceManager.AddGenStartCallback((_, _2, _3, _4) => Structure_CustomLockers.replaceableLockers.Clear());
+
+			if (Chainloader.PluginInfos.ContainsKey(GUIDs.LOADER) && Chainloader.PluginInfos.ContainsKey(GUIDs.STUDIO))
+				EditorIntegration.Initialize(assetMan);
 		}
 
 		IEnumerator CreateAssets()
@@ -38,6 +48,7 @@ namespace BBPlusLockers.Plugin
 			yield return "Creating lockpick...";
 			CreateLockpick();
 			yield return "Creating locker assets...";
+			GetLockerAssets();
 		}
 
 		void RegisterGenerationChanges(string lvlname, int lvlNum, SceneObject sco)
@@ -53,6 +64,9 @@ namespace BBPlusLockers.Plugin
 				if (ld.IsModifiedByMod(Info)) continue;
 				// Lockpick setup
 				modified = AddLockpickToLevelObject(ld, lvlname);
+
+				// Custom Locker structure setup
+				modified = AddCustomLockerToLevelObject(ld, lvlname);
 
 				if (modified)
 					ld.MarkAsModifiedByMod(Info);
